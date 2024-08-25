@@ -1,0 +1,398 @@
+[
+  {
+    "optionName": "1-3 Special Characters",
+    "instruction": "Enter 1-3 special characters.",
+    "quickDescription": "We’ll use the three special characters.",
+    "explanation": "Special characters add an extra layer of security to your password. By entering 1-3 special characters (e.g., '@#$'), we use these directly to create a secure and unique part of your password."
+  },
+  {
+    "optionName": "Birth City Letters",
+    "instruction": "Enter the city where you were born.",
+    "quickDescription": "We’ll use the first three letters of the city name.",
+    "explanation": "The city where you were born holds a significant place in your life. By entering the full name of your birth city (e.g., 'New York'), we extract the first three letters ('NEW'). This keeps the connection to your birthplace strong while providing a unique, yet easy-to-remember part of your password."
+  },
+  {
+    "optionName": "Mother’s Birth Month Number",
+    "instruction": "Enter the full name of the month your mother was born.",
+    "quickDescription": "We’ll convert the month name into its corresponding number.",
+    "explanation": "Your mother's birth month is a meaningful piece of information. By entering the full month name (e.g., 'January'), we transform it into its corresponding numerical value ('01'). This method keeps the input memorable while ensuring your password is more secure."
+  },
+  {
+    "optionName": "Father’s Birth Year",
+    "instruction": "Enter the year your father was born.",
+    "quickDescription": "We’ll use the last two digits of the year.",
+    "explanation": "A father’s birth year is a detail that stays with you for life. By inputting the full year (e.g., '1955'), we extract the last two digits ('55') to form part of your password. This transformation makes the number easy to remember but hard for others to guess."
+  },
+  {
+    "optionName": "Favorite Vacation Destination Letters",
+    "instruction": "Enter the name of your favorite vacation destination.",
+    "quickDescription": "We’ll use the first three letters of the destination name.",
+    "explanation": "Your favorite vacation destination is a place that holds special memories. By entering the full name of the destination (e.g., 'Hawaii'), we extract the first three letters ('HAW') to create a unique and personal part of your password."
+  },
+  {
+    "optionName": "First Pet’s Name Initials",
+    "instruction": "Enter the breed of your first pet.",
+    "quickDescription": "We’ll use the first two letters of the breed.",
+    "explanation": "The breed of your first pet is a unique and personal detail. When you input the breed name (e.g., 'Golden Retriever'), we take the initials ('GR') to create part of your password. This makes for a strong, yet memorable, password segment."
+  },
+  {
+    "optionName": "First House Number",
+    "instruction": "Enter the street number of the first house you lived in.",
+    "quickDescription": "We’ll use the digits from your house number.",
+    "explanation": "The first house you lived in often carries sentimental value. By entering your first house’s street number (e.g., '742'), those digits ('742') directly become part of your password, offering a numeric element that’s easy to recall."
+  },
+  {
+    "optionName": "Mother's Middle Name Letter",
+    "instruction": "Enter your mother’s middle name.",
+    "quickDescription": "We’ll use the first letter of the name.",
+    "explanation": "A mother's middle name is a deeply personal detail that stays constant. By entering the full middle name (e.g., 'Marie'), we take the first letter ('M') to form a subtle but significant part of your password."
+  },
+  {
+    "optionName": "Father's Middle Name Letter",
+    "instruction": "Enter your father’s middle name.",
+    "quickDescription": "We’ll use the first letter of the name.",
+    "explanation": "A father's middle name is a detail that often stays with you. By entering the full middle name (e.g., 'James'), we extract the first letter ('J') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "Graduation Year",
+    "instruction": "Enter the year you graduated from high school or college.",
+    "quickDescription": "We’ll use the last two digits of the year.",
+    "explanation": "Your graduation year marks a major milestone in your life. By inputting the full year (e.g., '2003'), we use the last two digits ('03') to create a memorable and personal part of your password."
+  },
+  {
+    "optionName": "First Boss’s Last Name Letter",
+    "instruction": "Enter the last name of your first boss.",
+    "quickDescription": "We’ll use the first letter of the last name.",
+    "explanation": "The last name of your first boss is likely a detail you won't forget. By entering the full last name (e.g., 'Smith'), we extract the first letter ('S') to include in your password. This adds a layer of personal history to your security."
+  },
+  {
+    "optionName": "First Vehicle Model Letters",
+    "instruction": "Enter the model of your first vehicle.",
+    "quickDescription": "We’ll use the first three letters of the model name.",
+    "explanation": "The model of your first vehicle is a significant memory. By entering the full model name (e.g., 'Civic'), we use the first three letters ('CIV') to create part of your password, keeping it both meaningful and secure."
+  },
+  {
+    "optionName": "Childhood Favorite Book Title",
+    "instruction": "Enter the title of a book you loved as a child.",
+    "quickDescription": "We’ll use the initials of the first three words in the title.",
+    "explanation": "A favorite childhood book often holds a special place in your heart. By entering the full title (e.g., 'The Hobbit'), we take the initials of the first three words ('TH') to create a nostalgic yet secure part of your password."
+  },
+  {
+    "optionName": "First Country Visited Initials",
+    "instruction": "Enter the first country you visited outside your home country.",
+    "quickDescription": "We’ll use the first three letters of the country name.",
+    "explanation": "The first country you visited can be a memorable experience. By entering the full country name (e.g., 'France'), we extract the first three letters ('FRA') to create a unique part of your password that’s easy to remember."
+  },
+  {
+    "optionName": "Birth Hospital Name Initials",
+    "instruction": "Enter the name of the hospital where you were born.",
+    "quickDescription": "We’ll use the initials of the hospital name.",
+    "explanation": "The hospital where you were born is a foundational part of your history. By entering the full hospital name (e.g., 'St. Mary's'), we take the initials ('SM') to create a part of your password that is both personal and secure."
+  },
+  {
+    "optionName": "First Teacher’s Last Name Letter",
+    "instruction": "Enter the last name of your first teacher.",
+    "quickDescription": "We’ll use the first letter of the last name.",
+    "explanation": "The name of your first teacher often stays with you throughout life. By entering the full last name (e.g., 'Johnson'), we extract the first letter ('J') to create a subtle yet personal element of your password."
+  },
+  {
+    "optionName": "First Concert Attended Initials",
+    "instruction": "Enter the name of the first concert you attended.",
+    "quickDescription": "We’ll use the initials of the band or artist name.",
+    "explanation": "Your first concert is a memorable experience. By entering the full name of the band or artist (e.g., 'The Beatles'), we take the initials ('TB') to create a part of your password that is meaningful and secure."
+  },
+  {
+    "optionName": "First Street Name Anagram",
+    "instruction": "Enter the name of the first street you lived on.",
+    "quickDescription": "We’ll use an anagram of the street name.",
+    "explanation": "The first street you lived on is often a detail that stays with you. By entering the full street name (e.g., 'Maple'), we create an anagram (e.g., 'Leapm') to form a part of your password that is both personal and difficult to guess."
+  },
+  {
+    "optionName": "First Company Worked For Letters",
+    "instruction": "Enter the name of the first company you worked for.",
+    "quickDescription": "We’ll use the initials of the company name.",
+    "explanation": "Your first job is a milestone in your professional life. By entering the full name of the company (e.g., 'Acme Corp'), we take the initials ('AC') to create a memorable and significant part of your password."
+  },
+  {
+    "optionName": "High School Mascot Letters",
+    "instruction": "Enter the mascot of your high school.",
+    "quickDescription": "We’ll use the first three letters of the mascot's name.",
+    "explanation": "The mascot of your high school is a unique piece of your personal history. By entering the full name of the mascot (e.g., 'Tigers'), we use the first three letters ('TIG') to create a distinctive part of your password."
+  },
+  {
+    "optionName": "First Family Vacation Location Letters",
+    "instruction": "Enter the location of your first family vacation.",
+    "quickDescription": "We’ll use the first three letters of the location name.",
+    "explanation": "Your first family vacation is often a cherished memory. By entering the full location name (e.g., 'Disneyland'), we extract the first three letters ('DIS') to create a memorable part of your password."
+  },
+  {
+    "optionName": "Father's First Vehicle Make Letters",
+    "instruction": "Enter the make of your father's first vehicle.",
+    "quickDescription": "We’ll use the first three letters of the make.",
+    "explanation": "The make of your father's first vehicle is a detail that might have been significant in your family. By entering the full make name (e.g., 'Ford'), we extract the first three letters ('FOR') to create a strong part of your password."
+  },
+  {
+    "optionName": "Childhood Best Friend's Initials",
+    "instruction": "Enter the initials of your childhood best friend.",
+    "quickDescription": "We’ll use the initials directly.",
+    "explanation": "Your childhood best friend is someone you likely hold dear. By entering their initials (e.g., 'AB'), we use these directly as part of your password, making it both personal and secure."
+  },
+  {
+    "optionName": "Grandparent's Birth Year",
+    "instruction": "Enter the year one of your grandparents was born.",
+    "quickDescription": "We’ll use the last two digits of the year.",
+    "explanation": "The birth year of a grandparent is a significant piece of family history. By entering the full year (e.g., '1923'), we will use the full year ('1923') and then reverse them to create part of your password."
+  },
+  {
+    "optionName": "First Apartment Number",
+    "instruction": "Enter the number of your first apartment.",
+    "quickDescription": "We’ll use the digits from your apartment number.",
+    "explanation": "The number of your first apartment is a detail that often sticks with you. By entering your apartment number (e.g., '305'), those digits ('305') become part of your password, offering a numeric element that’s easy to recall."
+  },
+  {
+    "optionName": "Mother's First Vehicle Make Letters",
+    "instruction": "Enter the make of your mother's first vehicle.",
+    "quickDescription": "We’ll use the first three letters of the make.",
+    "explanation": "The make of your mother's first vehicle can hold significant memories. By entering the full make name (e.g., 'Honda'), we use the first three letters ('HON') to create a meaningful and secure part of your password."
+  },
+  {
+    "optionName": "First Foreign Language Learned Letters",
+    "instruction": "Enter the name of the first foreign language you learned.",
+    "quickDescription": "We’ll use the first three letters of the language name.",
+    "explanation": "The first foreign language you learned is a part of your educational journey. By entering the full name of the language (e.g., 'Spanish'), we extract the first three letters ('SPA') to create a memorable and secure part of your password."
+  },
+  {
+    "optionName": "First Trip Alone Location Letters",
+    "instruction": "Enter the location of the first trip you took alone.",
+    "quickDescription": "We’ll use the first three letters of the location name.",
+    "explanation": "The first trip you took alone is a significant milestone. By entering the full location name (e.g., 'Paris'), we extract the first three letters ('PAR') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Grandchild's Initials",
+    "instruction": "Enter the initials of your first grandchild.",
+    "quickDescription": "We’ll use the initials directly.",
+    "explanation": "The initials of your first grandchild are a detail that holds deep personal meaning. By entering their initials (e.g., 'JK'), we use these directly to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Sport Played Initials",
+    "instruction": "Enter the name of the first sport you played.",
+    "quickDescription": "We’ll use the first three letters of the sport name.",
+    "explanation": "The first sport you played is often a significant memory. By entering the full name of the sport (e.g., 'Soccer'), we extract the first three letters ('SOC') to create a secure part of your password."
+  },
+  {
+    "optionName": "First Street Name Initials",
+    "instruction": "Enter the initials of the first street you lived on.",
+    "quickDescription": "We’ll use the initials directly.",
+    "explanation": "The first street you lived on often holds special memories. By entering the initials of the street name (e.g., 'M' for 'Maple Street'), we use these directly to create a meaningful and secure part of your password."
+  },
+  {
+    "optionName": "First Home State or Province Letters",
+    "instruction": "Enter the name of the first state or province you lived in.",
+    "quickDescription": "We’ll use the initials of the state or province.",
+    "explanation": "The first state or province you lived in is a foundational part of your life. By entering the full name (e.g., 'California'), we extract the initials ('CA') to create a secure part of your password."
+  },
+  {
+    "optionName": "First International Trip Country Letters",
+    "instruction": "Enter the country of your first international trip.",
+    "quickDescription": "We’ll use the first three letters of the country name.",
+    "explanation": "The first international trip you took is often a memorable experience. By entering the full country name (e.g., 'Japan'), we extract the first three letters ('JAP') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Job Title Initials",
+    "instruction": "Enter your first job title.",
+    "quickDescription": "We’ll use the initials of the job title.",
+    "explanation": "Your first job title is a significant milestone in your career. By entering the full title (e.g., 'Sales Assistant'), we take the initials ('SA') to create a memorable and secure part of your password."
+  },
+  {
+    "optionName": "High School Graduation Ceremony Location Letters",
+    "instruction": "Enter the location of your high school graduation ceremony.",
+    "quickDescription": "We’ll use the first three letters of the location name.",
+    "explanation": "The location of your first graduation ceremony is a significant part of your educational journey. By entering the full location name (e.g., 'Auditorium'), we extract the first three letters ('AUD') to create a memorable part of your password."
+  },
+  {
+    "optionName": "First Emergency Contact's Initials",
+    "instruction": "Enter the initials of your first emergency contact.",
+    "quickDescription": "We’ll use the initials directly.",
+    "explanation": "The initials of your first emergency contact are likely a memorable detail. By entering these initials (e.g., 'JL'), we use them directly to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Significant Achievement Initials",
+    "instruction": "Enter the name or title of your first significant achievement.",
+    "quickDescription": "We’ll use the initials of the achievement name.",
+    "explanation": "Your first significant achievement is a proud moment in your life. By entering the full name or title (e.g., 'Marathon Completion'), we extract the initials ('MC') to create a memorable part of your password."
+  },
+  {
+    "optionName": "First Childhood Pet's Name Initials",
+    "instruction": "Enter the name of your first childhood pet.",
+    "quickDescription": "We’ll use the initials of the pet's name.",
+    "explanation": "The name of your first childhood pet often holds sentimental value. By entering the full name (e.g., 'Buddy'), we take the initials ('B') to create a secure and personal part of your password."
+  },
+  {
+    "optionName": "First Family Heirloom Name Letters",
+    "instruction": "Enter the name of the first family heirloom you received.",
+    "quickDescription": "We’ll use the first three letters of the heirloom name.",
+    "explanation": "The first family heirloom you received is likely a cherished item. By entering the full name of the heirloom (e.g., 'Pocket Watch'), we extract the first three letters ('POC') to create a meaningful and secure part of your password."
+  },
+  {
+    "optionName": "First Summer Camp Name Initials",
+    "instruction": "Enter the name of the first summer camp you attended.",
+    "quickDescription": "We’ll use the initials of the camp name.",
+    "explanation": "The first summer camp you attended is often a cherished memory. By entering the full name of the camp (e.g., 'Camp Pinewood'), we take the initials ('CP') to create a secure and memorable part of your password."
+  },
+  {
+    "optionName": "First Vacation Destination Letters",
+    "instruction": "Enter the name of the first vacation destination you remember.",
+    "quickDescription": "We’ll use the first three letters of the destination name.",
+    "explanation": "Your first vacation destination is likely a special memory. By entering the full name of the destination (e.g., 'Hawaii'), we extract the first three letters ('HAW') to create a secure and personal part of your password."
+  },
+  {
+    "optionName": "First Love's Initials",
+    "instruction": "Enter the initials of your first love.",
+    "quickDescription": "We’ll use the initials directly.",
+    "explanation": "The initials of your first love are likely a memorable detail. By entering their initials (e.g., 'AJ'), we use them directly to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Award Title Initials",
+    "instruction": "Enter the title of the first award you received.",
+    "quickDescription": "We’ll use the initials of the award title.",
+    "explanation": "The title of the first award you received is often a cherished memory. By entering the full title (e.g., 'Perfect Attendance'), we take the initials ('PA') to create a secure and meaningful part of your password."
+  },
+  {
+    "optionName": "First Favorite Teacher's Last Name Initial",
+    "instruction": "Enter the last name of your first favorite teacher.",
+    "quickDescription": "We’ll use the first letter of the last name.",
+    "explanation": "The last name of your first favorite teacher is often a detail that stays with you. By entering the full last name (e.g., 'Johnson'), we take the first letter ('J') to create a secure part of your password."
+  },
+  {
+    "optionName": "First Apartment Building Name Letters",
+    "instruction": "Enter the name of the first apartment building you lived in.",
+    "quickDescription": "We’ll use the first three letters of the building name.",
+    "explanation": "The name of the first apartment building you lived in is often a memorable detail. By entering the full name (e.g., 'Sunset Towers'), we extract the first three letters ('SUN') to create a meaningful and secure part of your password."
+  },
+  {
+    "optionName": "First Time Voting Location Letters",
+    "instruction": "Enter the location where you first voted.",
+    "quickDescription": "We’ll use the first three letters of the location name.",
+    "explanation": "The location where you first voted is often a significant memory. By entering the full name of the location (e.g., 'City Hall'), we extract the first three letters ('CIT') to create a meaningful part of your password."
+  },
+  {
+    "optionName": "First Foreign Country Code",
+    "instruction": "Enter the country code of the first foreign country you visited.",
+    "quickDescription": "We’ll use the digits of the country code.",
+    "explanation": "The first foreign country you visited is likely a memorable experience. By entering the country code (e.g., '44' for the UK), we use those digits ('44') directly to create a part of your password."
+  },
+  {
+    "optionName": "First Family Pet's Name Initials",
+    "instruction": "Enter the name of the first family pet.",
+    "quickDescription": "We’ll use the first letter of the pet's name.",
+    "explanation": "The first family pet often holds a special place in your heart. By entering the full name (e.g., 'Rover'), we use the first letter ('R') to create a part of your password that’s easy to remember."
+  },
+  {
+    "optionName": "First Friend's Name Initials",
+    "instruction": "Enter the name of your first friend.",
+    "quickDescription": "We’ll use the initials of your friend's name.",
+    "explanation": "Your first friend is someone who likely had a significant impact on your early life. By entering their full name (e.g., 'Tommy Lee'), we use the initials ('TL') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Job Location Letters",
+    "instruction": "Enter the location of your first job.",
+    "quickDescription": "We’ll use the first three letters of the location name.",
+    "explanation": "The location of your first job is often a detail that stays with you. By entering the full location name (e.g., 'Walmart'), we use the first three letters ('WAL') to create a part of your password."
+  },
+  {
+    "optionName": "First Travel Destination Letters",
+    "instruction": "Enter the name of your first travel destination.",
+    "quickDescription": "We’ll use the first three letters of the destination name.",
+    "explanation": "Your first travel destination is likely a special memory. By entering the full name of the destination (e.g., 'Paris'), we use the first three letters ('PAR') to create a secure part of your password."
+  },
+  {
+    "optionName": "First Summer Camp Friend's Name Initials",
+    "instruction": "Enter the name of your first summer camp friend.",
+    "quickDescription": "We’ll use the initials of your friend's name.",
+    "explanation": "Your first summer camp friend is likely someone who made a lasting impression. By entering their full name (e.g., 'Sarah Connor'), we use the initials ('SC') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Childhood Hobby",
+    "instruction": "Enter the name of your first childhood hobby.",
+    "quickDescription": "We’ll use the first three letters of the hobby name.",
+    "explanation": "Your first childhood hobby is often something you fondly remember. By entering the full name (e.g., 'Drawing'), we use the first three letters ('DRA') to create a meaningful part of your password."
+  },
+  {
+    "optionName": "First Art Project Title",
+    "instruction": "Enter the title of the first art project you completed.",
+    "quickDescription": "We’ll use the initials of the project title.",
+    "explanation": "The title of your first art project is a significant creative milestone. By entering the full title (e.g., 'Sunset in the City'), we use the initials ('SITC') to create a secure and memorable part of your password."
+  },
+  {
+    "optionName": "First International Flight Airline",
+    "instruction": "Enter the name of the airline on your first international flight.",
+    "quickDescription": "We’ll use the initials of the airline name.",
+    "explanation": "Your first international flight is often a memorable experience. By entering the full name of the airline (e.g., 'British Airways'), we use the initials ('BA') to create a part of your password that’s easy to recall."
+  },
+  {
+    "optionName": "First Road Trip Destination",
+    "instruction": "Enter the name of the first road trip destination you visited.",
+    "quickDescription": "We’ll use the first three letters of the destination name.",
+    "explanation": "The first road trip destination you visited is likely a special memory. By entering the full name of the destination (e.g., 'Grand Canyon'), we use the first three letters ('GRA') to create a secure part of your password."
+  },
+  {
+    "optionName": "First Music Album Purchased",
+    "instruction": "Enter the title of the first music album you purchased.",
+    "quickDescription": "We’ll use the initials of the album title.",
+    "explanation": "The first music album you purchased is often a significant memory. By entering the full title (e.g., 'Abbey Road'), we use the initials ('AR') to create a secure and memorable part of your password."
+  },
+  {
+    "optionName": "First Teacher's Name",
+    "instruction": "Enter the full name of your first teacher.",
+    "quickDescription": "We’ll use the initials of the teacher's name.",
+    "explanation": "Your first teacher is likely someone who had a significant impact on your early education. By entering their full name (e.g., 'Mrs. Thompson'), we use the initials ('MT') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First College Dorm Name",
+    "instruction": "Enter the name of your first college dormitory.",
+    "quickDescription": "We’ll use the first three letters of the dorm name.",
+    "explanation": "Your first college dormitory is often a place filled with memories. By entering the full name (e.g., 'Maple Hall'), we use the first three letters ('MAP') to create a meaningful part of your password."
+  },
+  {
+    "optionName": "Work Anniversary Date",
+    "instruction": "Enter the date of your first work anniversary.",
+    "quickDescription": "We’ll use the digits of the date directly.",
+    "explanation": "Your first work anniversary is a significant milestone in your career. By entering the full date (e.g., '06/15/2010'), we use the digits ('06152010') directly to create a memorable and secure part of your password."
+  },
+  {
+    "optionName": "Your Significant Other's First and Last Name",
+    "instruction": "Enter your significant other's first and last name.",
+    "quickDescription": "We’ll use the initials of your significant other's name.",
+    "explanation": "Your significant other's name is a deeply personal detail. By entering their full name (e.g., 'John Doe'), we use the initials ('JD') to create a secure and meaningful part of your password."
+  },
+  {
+    "optionName": "Your Marriage Anniversary Date (MM-DD-YYYY)",
+    "instruction": "Enter the date of your marriage anniversary.",
+    "quickDescription": "We’ll use the digits of the date directly.",
+    "explanation": "Your marriage anniversary is a significant milestone in your life. By entering the full date (e.g., '12/25/2005'), we use the digits ('12252005') directly to create a memorable and secure part of your password."
+  },
+  {
+    "optionName": "First Holiday Tradition",
+    "instruction": "Enter the name of the first holiday tradition you remember.",
+    "quickDescription": "We’ll use the first three letters of the tradition name.",
+    "explanation": "Your first holiday tradition is often a cherished memory. By entering the full name (e.g., 'Tree Decorating'), we use the first three letters ('TRE') to create a personal and secure part of your password."
+  },
+  {
+    "optionName": "First Job Title",
+    "instruction": "Enter the title of your first job.",
+    "quickDescription": "We’ll use the initials of the job title.",
+    "explanation": "The title of your first job is a significant milestone in your career. By entering the full title (e.g., 'Sales Associate'), we use the initials ('SA') to create a memorable and secure part of your password."
+  },
+  {
+    "optionName": "First Computer Model",
+    "instruction": "Enter the model of the first computer you owned.",
+    "quickDescription": "We’ll use the first three letters of the model name.",
+    "explanation": "The first computer you owned is often a significant memory. By entering the full model name (e.g., 'Macintosh'), we use the first three letters ('MAC') to create a meaningful and secure part of your password."
+  },
+  {
+    "optionName": "First Day of School Year",
+    "instruction": "Enter the year you first started school.",
+    "quickDescription": "We’ll use the last two digits of the year.",
+    "explanation": "The year you first started school is a significant milestone. By entering the full year (e.g., '1995'), we use the last two digits ('95') to create a meaningful and secure part of your password."
+  }
+]

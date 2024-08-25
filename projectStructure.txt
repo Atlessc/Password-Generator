@@ -1,0 +1,32 @@
+└─ .gitignore
+└─ README.md
+└─ eslint.config.js
+└─ index.html
+└─ mapp-project-structure.js
+└─ package-lock.json
+└─ package.json
+└─ public
+   ├─ vite.svg
+└─ src
+   ├─ App.css
+   ├─ App.jsx
+   ├─ ZustandStore.js
+   ├─ assets
+   │  ├─ react.svg
+   ├─ components
+   │  ├─ ActionButtons.jsx
+   │  ├─ Footer.jsx
+   │  ├─ InputField.jsx
+   │  ├─ NavBar.jsx
+   │  ├─ OptionSelector.jsx
+   │  ├─ PasswordDisplay.jsx
+   │  ├─ PasswordExplanation.jsx
+   │  ├─ PasswordLengthControl.jsx
+   │  ├─ UsePasswordGenerator.jsx
+   ├─ context
+   ├─ hooks
+   ├─ index.css
+   ├─ main.jsx
+   ├─ pages
+   │  └─ Home.jsx
+└─ vite.config.js
