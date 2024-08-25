@@ -48,10 +48,27 @@ function Home() {
       >
         f
       </div> */}
-      <div className='background-color'
+      {/* <div className='background-color'
       >
         f
-      </div>
+      </div> */}
+      <div style={{
+  backgroundImage: `url("https://assets.getpartiful.com/backgrounds/aquatica/mobile.jpg"), linear-gradient(to right bottom, rgb(3, 3, 13) 40%, rgb(12, 42, 114) 55.4731%, rgb(60, 111, 192) 80%)`,
+  animationDuration: '12s',
+  zIndex: 1,
+  position: 'fixed',
+  top: 0,
+  width: '100vw',
+  height: '100vh',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  // backgroundRepeat: 'no-repeat',
+}}>
+  <div className="ptf-98OxY" style={{
+    backgroundImage: `url("https://assets.getpartiful.com/backgrounds/aquatica/mobile.jpg"), linear-gradient(to right bottom, rgb(3, 3, 13) 40%, rgb(12, 42, 114) 55.4731%, rgb(60, 111, 192) 80%)`
+  }}></div>
+</div>
+
       <div
         style={{
           padding: "20px",
