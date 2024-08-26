@@ -14,6 +14,7 @@ const algoMap = {
   getPhraseInitials: () => import('./algos/PhraseInitials.js'),
   getDailyProductsUsed: () => import('./algos/DailyProductsUsed.js'),
   getCommonWordAnagram: () => import('./algos/CommonWordAnagram.js'),
+  getStreetNameAnagram: () => import('./algos/StreetNameAnagram.js'),
   generateRandomNumbers: () => import('./algos/generateRandomNumbers.js'),
   generateRandomLetters: () => import('./algos/generateRandomLetters.js'),
   generateRandomSpecialCharacters: () => import('./algos/generateRandomSpecialCharacters.js'),
