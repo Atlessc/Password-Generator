@@ -14,9 +14,8 @@ function PasswordDisplay() {
         backgroundColor: 'white',
         padding: '10px',
         borderRadius: '10px',
-        minWidth: '300px',
-        maxWidth: '500px',
-        height: '100px',
+        width: 'clamp(300px, 600px, 100vw)',
+        height: '50px',
         color: 'black',
       }}>
       {password}
