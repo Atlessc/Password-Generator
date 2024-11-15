@@ -6,7 +6,7 @@ const getDailyProductsUsed = (productsString) => {
   if (!productsString || typeof productsString !== 'string') return '';
 
   // Split the string into an array of product names using ";" as the separator
-  const products = productsString.split(';').map(product => product.trim());
+  const products = productsString.split(',').map(product => product.trim());
 
   // Validate that we have at least 1 but no more than 3 products
   if (products.length < 1 || products.length > 3) return '';
@@ -31,7 +31,7 @@ const getDailyProductsUsed = (productsString) => {
 
   // Combine the initials into a single string and randomize capitalization
   const result = initials.join('');
-  return randomizeCapitalization(result);
+  return result;
 };
 
 export default getDailyProductsUsed;

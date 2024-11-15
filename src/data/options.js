@@ -13,7 +13,7 @@ export const optionDetails = [
   // },
   {
     shortName: "Daily Products Used",
-    label: "Enter three different names of products you use daily, separated by semicolons, and we'll use the first letters of each to create part of your password.",
+    label: "Enter a name of a product you use daily.",
     algo: "getDailyProductsUsed",
     type: "text", 
   },
