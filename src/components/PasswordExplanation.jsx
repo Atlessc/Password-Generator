@@ -36,7 +36,7 @@ function PasswordExplanation() {
                 Original Data: {part.value}
               </div>
             }
-            position="top"
+            position="bottom"
             backgroundColor="#ff0000"
             opacity={1}
           >
