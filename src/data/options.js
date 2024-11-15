@@ -35,12 +35,12 @@ export const optionDetails = [
   //   algo: "getCharacterName",
   //   type: "text",
   // },
-  // {
-  //   shortName: "Reversed Date",
-  //   label: "Enter a date, and we'll reverse it to create part of your password.",
-  //   algo: "getReversedDate",
-  //   type: "text",
-  // },
+  {
+    shortName: "Reversed year",
+    label: "Enter a year thats important to you or that you remember for some reason, nothing within the last 20 years, and then We'll reverse it.",
+    algo: "getReversedYear",
+    type: "number",
+  },
   // {
   //   shortName: "Street Names",
   //   label: "Enter three street names you've passed by recently, and we'll use the first letters of each to create part of your password.",

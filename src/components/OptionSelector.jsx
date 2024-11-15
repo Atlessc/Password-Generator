@@ -78,8 +78,8 @@ function OptionSelector() {
                 <InputField
                   label={option.label}
                   value={option.value}
-                  type="number"
-                  onChange={(e) => handleOptionLengthChange(index, e.target.value)} 
+                  type="text"
+                  onChange={(e) => handleOptionChange(index, e.target.value)} 
                 />
               )}
                 
