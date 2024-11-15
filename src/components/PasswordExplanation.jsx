@@ -12,7 +12,7 @@ function PasswordExplanation() {
   });
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px', padding: '10px' }}>
+    <div style={{ textAlign: 'center', margin: '20px auto 60px auto', padding: '10px' }}>
       <h3 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>Password Explanation:</h3>
       <div
         style={{
