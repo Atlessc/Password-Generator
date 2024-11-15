@@ -13,6 +13,7 @@ const calculateRequiredOptions = (passwordLength) => {
 const algoMap = {
   getPhraseInitials: () => import('./algos/PhraseInitials.js'),
   getDailyProductsUsed: () => import('./algos/DailyProductsUsed.js'),
+  getReversedYear: () => import('./algos/getReversedYear.js'),
   getCommonWordAnagram: () => import('./algos/CommonWordAnagram.js'),
   getStreetNameAnagram: () => import('./algos/StreetNameAnagram.js'),
   generateRandomNumbers: () => import('./algos/generateRandomNumbers.js'),
@@ -94,7 +95,10 @@ const useStore = create((set, get) => ({
       if (algoFunction) {
         try {
           const importedFunction = (await algoFunction()).default;
-          const result = importedFunction(option.value || option.length); // Use length if value is not provided
+          const result =
+            option.shortName === "Special Character"
+              ? importedFunction({ char: option.value })
+              : importedFunction(option.value || option.length);
           passwordSegments.push(result);
           explanationSegments.push(`${option.shortName}: ${result}`);
 
