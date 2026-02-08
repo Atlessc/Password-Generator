@@ -1,4 +1,5 @@
 const PASSWORD_CHARSET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+const SPECIAL_SYMBOLS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '?'];
 
 const getWords = (input = '') =>
   String(input)
@@ -26,6 +27,7 @@ const randomDigits = (count = 2) => {
 };
 
 const randomChar = () => PASSWORD_CHARSET[Math.floor(Math.random() * PASSWORD_CHARSET.length)];
+const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -47,6 +49,15 @@ const parseNumber = (input, fallback = 0) => {
 };
 
 const transformByAlgo = {
+  specialCharacterSelector: (input) => {
+    if (Array.isArray(input) && input.length) return input.join('');
+    const count = Math.floor(Math.random() * 3) + 1;
+    let symbols = '';
+    for (let i = 0; i < count; i += 1) {
+      symbols += randomFrom(SPECIAL_SYMBOLS);
+    }
+    return symbols;
+  },
   phraseInitials: (input) => firstLetters(input) || 'ClctT',
   bookPageDigits: (input) => digitsOnly(input).slice(0, 4) || randomDigits(3),
   threeWordSyllables: (input) => {

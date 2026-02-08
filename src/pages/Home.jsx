@@ -107,6 +107,22 @@ const Input = styled.input`
   padding: 0.55rem 0.65rem;
 `;
 
+const SymbolGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+`;
+
+const SymbolButton = styled.button`
+  border-radius: 0.45rem;
+  border: ${({ selected }) => (selected ? '1px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.25)')};
+  background: ${({ selected }) => (selected ? 'rgba(102, 126, 234, 0.3)' : 'rgba(255, 255, 255, 0.07)')};
+  color: white;
+  padding: 0.35rem 0.55rem;
+  min-width: 2rem;
+  cursor: pointer;
+`;
+
 const Controls = styled.div`
   display: flex;
   gap: 0.75rem;
@@ -145,8 +161,11 @@ const ExplanationList = styled.ul`
   color: #cbd5e1;
 `;
 
+const specialOption = passwordOptions.find((option) => option.algo === 'specialCharacterSelector');
+const regularOptions = passwordOptions.filter((option) => option.algo !== 'specialCharacterSelector');
+
 function Home() {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState(specialOption ? [specialOption] : []);
   const [inputValues, setInputValues] = useState({});
   const [passwordParts, setPasswordParts] = useState([]);
   const [passwordLength, setPasswordLength] = useState(18);
@@ -167,6 +186,16 @@ function Home() {
     setInputValues((prev) => ({ ...prev, [algo]: value }));
   };
 
+  const toggleSymbolSelection = (algo, symbol) => {
+    setInputValues((prev) => {
+      const current = Array.isArray(prev[algo]) ? prev[algo] : [];
+      const next = current.includes(symbol)
+        ? current.filter((entry) => entry !== symbol)
+        : [...current, symbol];
+      return { ...prev, [algo]: next };
+    });
+  };
+
   const handleGeneratePassword = () => {
     if (!selectedOptions.length) return;
     const parts = generatePassword(selectedOptions, inputValues, { length: passwordLength });
@@ -174,7 +203,7 @@ function Home() {
   };
 
   const handleClear = () => {
-    setSelectedOptions([]);
+    setSelectedOptions(specialOption ? [specialOption] : []);
     setInputValues({});
     setPasswordParts([]);
     setCopied(false);
@@ -192,7 +221,7 @@ function Home() {
       <Header>
         <Title>Memorable Password Generator</Title>
         <Subtitle>
-          Build passwords from 30 personal-but-obscure options, then generate one combined password.
+          Build passwords from personal-but-obscure options, then generate one combined password.
         </Subtitle>
       </Header>
 
@@ -200,11 +229,40 @@ function Home() {
         <Card>
           <Row>
             <SectionTitle>Password Options</SectionTitle>
-            <Subtle>{selectedOptions.length} selected / 30 available</Subtle>
+            <Subtle>{selectedOptions.length} selected / {passwordOptions.length} available</Subtle>
           </Row>
 
+          {specialOption && (
+            <InputRow>
+              <label>{specialOption.label}</label>
+              <SymbolGrid>
+                {specialOption.symbols.map((symbol) => {
+                  const selectedSymbols = Array.isArray(inputValues[specialOption.algo])
+                    ? inputValues[specialOption.algo]
+                    : [];
+                  const selected = selectedSymbols.includes(symbol);
+                  return (
+                    <SymbolButton
+                      key={`${specialOption.algo}-${symbol}`}
+                      type="button"
+                      selected={selected}
+                      onClick={() => toggleSymbolSelection(specialOption.algo, symbol)}
+                    >
+                      {symbol}
+                    </SymbolButton>
+                  );
+                })}
+              </SymbolGrid>
+              <Subtle>
+                {Array.isArray(inputValues[specialOption.algo]) && inputValues[specialOption.algo].length
+                  ? `Selected: ${inputValues[specialOption.algo].join(' ')}`
+                  : 'No symbols selected. Generator will pick 1-3 random symbols.'}
+              </Subtle>
+            </InputRow>
+          )}
+
           <OptionGrid>
-            {passwordOptions.map((option) => {
+            {regularOptions.map((option) => {
               const selected = selectedOptions.includes(option);
               return (
                 <OptionCard
@@ -231,18 +289,48 @@ function Home() {
             />
           </Controls>
 
-          {selectedOptions.length > 0 && (
+          {selectedOptions.filter((option) => option.algo !== 'specialCharacterSelector').length > 0 && (
             <InputGrid>
-              {selectedOptions.map((option) => (
+              {selectedOptions
+                .filter((option) => option.algo !== 'specialCharacterSelector')
+                .map((option) => (
                 <InputRow key={`${option.algo}-input`}>
                   <label htmlFor={option.algo}>{option.label}</label>
-                  <Input
-                    id={option.algo}
-                    type={option.type}
-                    value={inputValues[option.algo] || ''}
-                    placeholder={option.placeholder || ''}
-                    onChange={(e) => handleInputChange(option.algo, e.target.value)}
-                  />
+                  {option.type === 'symbol-multi' ? (
+                    <>
+                      <SymbolGrid>
+                        {option.symbols.map((symbol) => {
+                          const selectedSymbols = Array.isArray(inputValues[option.algo])
+                            ? inputValues[option.algo]
+                            : [];
+                          const selected = selectedSymbols.includes(symbol);
+                          return (
+                            <SymbolButton
+                              key={`${option.algo}-${symbol}`}
+                              type="button"
+                              selected={selected}
+                              onClick={() => toggleSymbolSelection(option.algo, symbol)}
+                            >
+                              {symbol}
+                            </SymbolButton>
+                          );
+                        })}
+                      </SymbolGrid>
+                      <Subtle>
+                        {Array.isArray(inputValues[option.algo]) && inputValues[option.algo].length
+                          ? `Selected: ${inputValues[option.algo].join(' ')}`
+                          : 'No symbols selected. Generator will pick 1-3 random symbols.'}
+                      </Subtle>
+                    </>
+                  ) : (
+                    <Input
+                      id={option.algo}
+                      type={option.type}
+                      value={inputValues[option.algo] || ''}
+                      placeholder={option.placeholder || ''}
+                      onChange={(e) => handleInputChange(option.algo, e.target.value)}
+                    />
+                  )}
                 </InputRow>
               ))}
             </InputGrid>

@@ -1,5 +1,12 @@
 export const passwordOptions = [
   {
+    shortName: "Special Characters",
+    label: "Pick one or more symbols. If none are selected, 1-3 random symbols are used.",
+    algo: "specialCharacterSelector",
+    type: "symbol-multi",
+    symbols: ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '?'],
+  },
+  {
     shortName: "Phrase Initials",
     label: "Use the first letter of each word from a phrase you create.",
     algo: "phraseInitials",
@@ -7,32 +14,11 @@ export const passwordOptions = [
     placeholder: "Cats love climbing tall trees",
   },
   {
-    shortName: "Random Book Page Digits",
-    label: "Enter a page number from a random book and use a number sequence from it.",
-    algo: "bookPageDigits",
-    type: "number",
-    placeholder: "347",
-  },
-  {
-    shortName: "Three Word Syllables",
-    label: "Enter three words and combine short syllables from each.",
-    algo: "threeWordSyllables",
-    type: "text",
-    placeholder: "elephant umbrella mountain",
-  },
-  {
     shortName: "Significant Day Number",
     label: "Enter a day of month that matters to you.",
     algo: "significantDay",
     type: "number",
     placeholder: "21",
-  },
-  {
-    shortName: "Home Window Count",
-    label: "Enter the number of windows in your home.",
-    algo: "windowCount",
-    type: "number",
-    placeholder: "12",
   },
   {
     shortName: "Interesting Word Length",
@@ -56,20 +42,6 @@ export const passwordOptions = [
     placeholder: "ziltoid alpha",
   },
   {
-    shortName: "Bed-to-Door Steps",
-    label: "Enter your step count from bed to front door.",
-    algo: "bedToDoorSteps",
-    type: "number",
-    placeholder: "37",
-  },
-  {
-    shortName: "Two-Language Mix",
-    label: "Enter two words from two languages separated by comma.",
-    algo: "twoLanguageMix",
-    type: "text",
-    placeholder: "hola, bonjour",
-  },
-  {
     shortName: "Constant Digits",
     label: "Enter digits from a meaningful constant/ratio.",
     algo: "constantDigits",
@@ -82,27 +54,6 @@ export const passwordOptions = [
     algo: "keystrokePattern",
     type: "text",
     placeholder: "qweqwe",
-  },
-  {
-    shortName: "Album Count x2",
-    label: "Enter photo count from an album; we multiply by 2.",
-    algo: "albumCountTimesTwo",
-    type: "number",
-    placeholder: "88",
-  },
-  {
-    shortName: "Invented Anagram",
-    label: "Enter an invented word/phrase; we create an anagram.",
-    algo: "inventedAnagram",
-    type: "text",
-    placeholder: "orbit lantern",
-  },
-  {
-    shortName: "Room Object Count",
-    label: "Enter one object count from a room.",
-    algo: "roomObjectCount",
-    type: "number",
-    placeholder: "23",
   },
   {
     shortName: "Made-up Character + Random",
@@ -119,24 +70,10 @@ export const passwordOptions = [
     placeholder: "11",
   },
   {
-    shortName: "Alphabet Position Code",
-    label: "Enter a word; we map letters to alphabet positions.",
-    algo: "alphabetPositionCode",
-    type: "text",
-    placeholder: "code",
-  },
-  {
     shortName: "Reversed Event Date",
     label: "Enter an event date and we reverse its digits.",
     algo: "reversedEventDate",
     type: "date",
-  },
-  {
-    shortName: "Unread Email Count",
-    label: "Enter your unread email count.",
-    algo: "unreadEmailCount",
-    type: "number",
-    placeholder: "41",
   },
   {
     shortName: "Lyric Initials",
@@ -151,13 +88,6 @@ export const passwordOptions = [
     algo: "bookPageCount",
     type: "number",
     placeholder: "274",
-  },
-  {
-    shortName: "Stopwatch Digits",
-    label: "Enter a stopwatch time and use the digits.",
-    algo: "stopwatchDigits",
-    type: "text",
-    placeholder: "03:47.21",
   },
   {
     shortName: "Inside Joke Acronym",
@@ -185,13 +115,6 @@ export const passwordOptions = [
     algo: "keyboardPatternPlusRandom",
     type: "text",
     placeholder: "zxc",
-  },
-  {
-    shortName: "Key Count",
-    label: "Enter number of keys on a keyboard/instrument.",
-    algo: "keyCount",
-    type: "number",
-    placeholder: "88",
   },
   {
     shortName: "Photo Name Initials",
