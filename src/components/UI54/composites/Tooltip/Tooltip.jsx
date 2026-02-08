@@ -8,15 +8,15 @@ const TooltipWrapper = styled.div`
 
 const TooltipBox = styled.div`
   position: absolute;
-  background-color: ${({ backgroundColor }) => backgroundColor || '#333'};
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 12px;
+  background-color: ${({ backgroundColor }) => backgroundColor || 'var(--color-tooltip-bg)'};
+  color: var(--color-tooltip-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
   white-space: nowrap;
   z-index: 1000;
   opacity: ${({ opacity }) => opacity || 0.9};
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   transform: ${({ isVisible, position }) =>
     isVisible
@@ -35,7 +35,7 @@ const TooltipBox = styled.div`
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-bottom: 8px;
+    margin-bottom: var(--spacing-xxs);
   `}
   ${({ position }) =>
     position === 'bottom' &&
@@ -43,7 +43,7 @@ const TooltipBox = styled.div`
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 8px;
+    margin-top: var(--spacing-xxs);
   `}
   ${({ position }) =>
     position === 'left' &&
@@ -51,7 +51,7 @@ const TooltipBox = styled.div`
     right: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-right: 8px;
+    margin-right: var(--spacing-xxs);
   `}
   ${({ position }) =>
     position === 'right' &&
@@ -59,7 +59,7 @@ const TooltipBox = styled.div`
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: 8px;
+    margin-left: var(--spacing-xxs);
   `}
 `;
 
@@ -76,7 +76,7 @@ const TooltipArrow = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border-width: ${arrowSize}px ${arrowSize}px 0 ${arrowSize}px;
-    border-color: ${arrowColor || '#333'} transparent transparent transparent;
+    border-color: ${arrowColor || 'var(--color-tooltip-bg)'} transparent transparent transparent;
   `}
   ${({ position, arrowSize, arrowColor }) =>
     position === 'bottom' &&
@@ -85,7 +85,7 @@ const TooltipArrow = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border-width: 0 ${arrowSize}px ${arrowSize}px ${arrowSize}px;
-    border-color: transparent transparent ${arrowColor || '#333'} transparent;
+    border-color: transparent transparent ${arrowColor || 'var(--color-tooltip-bg)'} transparent;
   `}
   ${({ position, arrowSize, arrowColor }) =>
     position === 'left' &&
@@ -94,7 +94,7 @@ const TooltipArrow = styled.div`
     right: -${arrowSize}px;
     transform: translateY(-50%);
     border-width: ${arrowSize}px 0 ${arrowSize}px ${arrowSize}px;
-    border-color: transparent transparent transparent ${arrowColor || '#333'};
+    border-color: transparent transparent transparent ${arrowColor || 'var(--color-tooltip-bg)'};
   `}
   ${({ position, arrowSize, arrowColor }) =>
     position === 'right' &&
@@ -103,7 +103,7 @@ const TooltipArrow = styled.div`
     left: -${arrowSize}px;
     transform: translateY(-50%);
     border-width: ${arrowSize}px ${arrowSize}px ${arrowSize}px 0;
-    border-color: transparent ${arrowColor || '#333'} transparent transparent;
+    border-color: transparent ${arrowColor || 'var(--color-tooltip-bg)'} transparent transparent;
   `}
 `;
 
@@ -113,7 +113,7 @@ const Tooltip = ({
   position = 'top',
   backgroundColor,
   opacity,
-  trigger = 'hover', // 'hover' or 'click'
+  trigger = 'hover',
   delay = 0,
   allowEnter = true,
   arrow = true,

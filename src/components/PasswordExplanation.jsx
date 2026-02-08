@@ -1,6 +1,6 @@
 import React from 'react';
 import useStore from '../ZustandStore';
-import Tooltip from './ui/Tooltip';
+import Tooltip from './UI54/Tooltip';
 
 function PasswordExplanation() {
   const { password, passwordExplanation } = useStore();
