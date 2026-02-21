@@ -545,7 +545,7 @@ function Home() {
 
             <div className={`grid items-start gap-3 xl:flex-1 xl:min-h-0 ${sidebarOpen ? 'lg:grid-cols-[280px_1fr]' : ''}`}>
               <aside
-                className={`${sidebarOpen ? 'block' : 'hidden'} max-h-[460px] overflow-y-auto rounded-xl border border-base-content/15 p-2 xl:h-full xl:max-h-none`}
+                className={`${sidebarOpen ? 'block' : 'hidden'} max-h-115 overflow-y-auto rounded-xl border border-base-content/15 p-2 xl:h-full xl:max-h-none`}
               >
                 <h4 className={panelHeaderClass}>Options Menu</h4>
 
@@ -592,7 +592,7 @@ function Home() {
                 })}
               </aside>
 
-              <div className="flex max-h-[460px] flex-col items-stretch justify-start gap-3 overflow-y-auto rounded-xl border border-base-content/15 p-3 xl:h-full xl:min-h-0 xl:max-h-none">
+              <div className="flex max-h-115 flex-col items-stretch justify-start gap-3 overflow-y-auto rounded-xl border border-base-content/15 p-3 xl:h-full xl:min-h-0 xl:max-h-none">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="m-0 text-sm font-bold uppercase tracking-wider text-base-content/90">Option Fields</h4>
                   <p className={subtleTextClass}>Select 1 or more options. 2-10 options are recommended.</p>
