@@ -70,6 +70,82 @@ const normalizeMinLength = (rawValue, fallback) => {
   return Math.max(MIN_PASSWORD_LENGTH, Math.min(MAX_PASSWORD_LENGTH, parsed));
 };
 
+const getSelectionWeight = (option) => {
+  const numericWeight = Number(option?.selectionWeight);
+  if (numericWeight > 0) return numericWeight;
+
+  const avgCharLength = Math.max(1, Number(option?.avgCharLength) || 4);
+  return 1 / avgCharLength;
+};
+
+const sampleWeightedWithoutReplacement = (options = [], count = 0) => {
+  const pool = [...options];
+  const picks = [];
+
+  while (picks.length < count && pool.length) {
+    const totalWeight = pool.reduce((sum, option) => sum + getSelectionWeight(option), 0);
+    if (totalWeight <= 0) break;
+
+    let threshold = Math.random() * totalWeight;
+    let chosenIndex = pool.length - 1;
+
+    for (let index = 0; index < pool.length; index += 1) {
+      threshold -= getSelectionWeight(pool[index]);
+      if (threshold <= 0) {
+        chosenIndex = index;
+        break;
+      }
+    }
+
+    picks.push(pool[chosenIndex]);
+    pool.splice(chosenIndex, 1);
+  }
+
+  return picks;
+};
+
+const getRandomRegularSelection = (options = []) => {
+  const minCount = Math.min(2, options.length);
+  const maxCount = Math.min(10, options.length);
+  if (maxCount === 0) return [];
+
+  const count = maxCount <= minCount
+    ? maxCount
+    : Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+
+  const numericOptions = options.filter((option) => option.containsNumbers);
+  const nonNumericOptions = options.filter((option) => !option.containsNumbers);
+
+  const numericMin = Math.min(1, numericOptions.length, count);
+  const numericMax = Math.min(3, numericOptions.length, count);
+  const numericCount = numericMax <= numericMin
+    ? numericMax
+    : Math.floor(Math.random() * (numericMax - numericMin + 1)) + numericMin;
+
+  const selectedNumericOptions = sampleWeightedWithoutReplacement(numericOptions, numericCount);
+  const remainingCount = count - selectedNumericOptions.length;
+  const selectedNonNumericOptions = sampleWeightedWithoutReplacement(nonNumericOptions, remainingCount);
+  const combinedSelections = [...selectedNumericOptions, ...selectedNonNumericOptions];
+
+  if (selectedNonNumericOptions.length < remainingCount) {
+    const fallbackPool = numericOptions.filter(
+      (option) => !selectedNumericOptions.some((selected) => selected.algo === option.algo),
+    );
+    const extraNumericOptions = sampleWeightedWithoutReplacement(
+      fallbackPool,
+      remainingCount - selectedNonNumericOptions.length,
+    );
+    combinedSelections.push(...extraNumericOptions);
+  }
+
+  for (let i = combinedSelections.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [combinedSelections[i], combinedSelections[j]] = [combinedSelections[j], combinedSelections[i]];
+  }
+
+  return combinedSelections;
+};
+
 const getStrength = (password) => {
   const checks = {
     uppercase: /[A-Z]/.test(password),
@@ -252,6 +328,17 @@ function Home() {
     setInputValues((prev) => ({ ...prev, specialCharacterSelector: pool.slice(0, count) }));
   };
 
+  const handleRandomSelection = () => {
+    const randomRegularOptions = getRandomRegularSelection(regularOptions);
+    if (!randomRegularOptions.length) return;
+
+    setSelectedOptions(symbolOption ? [symbolOption, ...randomRegularOptions] : randomRegularOptions);
+    setActiveOptionAlgo(randomRegularOptions[0]?.algo || '');
+    setOpenPopoverAlgo('');
+    setFieldErrors({});
+    setGenerationError('');
+  };
+
   const handleGeneratePassword = () => {
     if (!selectedRegularOptions.length) {
       setGenerationError('Select at least one option from Options Menu before generating.');
@@ -311,7 +398,7 @@ function Home() {
   return (
     <main className="min-h-screen bg-base-300 p-5 text-base-content">
       <header className="mb-4 text-center">
-        <h1 className="mb-2 bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-3xl font-bold leading-tight text-transparent sm:text-5xl">
+        <h1 className="mb-2 bg-linear-to-r from-sky-300 to-indigo-400 bg-clip-text text-3xl font-bold leading-tight text-transparent sm:text-5xl">
           Memorable Password Generator
         </h1>
         <p className={subtleTextClass}>
@@ -319,8 +406,8 @@ function Home() {
         </p>
       </header>
 
-      <div className="grid gap-4 xl:grid-cols-[1.65fr_1fr]">
-        <section className={`${cardClass} grid gap-4`}>
+      <div className="grid min-h-full gap-4 xl:grid-cols-[1.65fr_1fr]">
+        <section className={`${cardClass} order-2 flex max-h-full flex-col gap-4 xl:order-1 xl:min-h-[calc(100vh-11rem)]`}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="m-0 text-xl font-bold">Password Options</h2>
             <p className={subtleTextClass}>
@@ -328,7 +415,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-base-content/15 p-3">
+          <div className="rounded-xl p-3">
             <h3 className={panelHeaderClass}>Generator Settings</h3>
 
             <div className="grid gap-3 md:grid-cols-[minmax(260px,360px)_1fr] md:items-end">
@@ -378,7 +465,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-base-content/15 p-3">
+          <div className="rounded-xl p-3">
             <h3 className={panelHeaderClass}>Special Symbols</h3>
 
             <p className={subtleTextClass}>{symbolOption?.label}</p>
@@ -435,7 +522,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-base-content/15 p-3">
+          <div className="flex flex-1 flex-col rounded-xl p-3 xl:min-h-0">
             <h3 className={panelHeaderClass}>Pattern Builder</h3>
 
             <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -446,11 +533,19 @@ function Home() {
               >
                 {sidebarOpen ? 'Hide options menu' : 'Show options menu'}
               </button>
+
+              <button
+                type="button"
+                className="btn btn-xs normal-case sm:btn-sm btn-outline btn-primary"
+                onClick={handleRandomSelection}
+              >
+                Random selection
+              </button>
             </div>
 
-            <div className={`grid items-start gap-3 ${sidebarOpen ? 'lg:grid-cols-[280px_1fr]' : ''}`}>
+            <div className={`grid items-start gap-3 xl:flex-1 xl:min-h-0 ${sidebarOpen ? 'lg:grid-cols-[280px_1fr]' : ''}`}>
               <aside
-                className={`${sidebarOpen ? 'block' : 'hidden'} max-h-[460px] overflow-y-auto rounded-xl border border-base-content/15 p-2`}
+                className={`${sidebarOpen ? 'block' : 'hidden'} max-h-[460px] overflow-y-auto rounded-xl border border-base-content/15 p-2 xl:h-full xl:max-h-none`}
               >
                 <h4 className={panelHeaderClass}>Options Menu</h4>
 
@@ -497,10 +592,10 @@ function Home() {
                 })}
               </aside>
 
-              <div className="flex max-h-[460px] flex-col items-stretch justify-start gap-3 overflow-y-auto rounded-xl border border-base-content/15 p-3">
+              <div className="flex max-h-[460px] flex-col items-stretch justify-start gap-3 overflow-y-auto rounded-xl border border-base-content/15 p-3 xl:h-full xl:min-h-0 xl:max-h-none">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="m-0 text-sm font-bold uppercase tracking-wider text-base-content/90">Option Fields</h4>
-                  <p className={subtleTextClass}>Select 1 or more options. 2-4 options are recommended.</p>
+                  <p className={subtleTextClass}>Select 1 or more options. 2-10 options are recommended.</p>
                 </div>
 
                 {selectedRegularOptions.length === 0 && (
@@ -647,7 +742,7 @@ function Home() {
         </section>
 
         <section
-          className={`${cardClass} sticky top-4 self-start max-h-[calc(100vh-2rem)] ${
+          className={`${cardClass} order-1 xl:order-2 xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-2rem)] ${
             explanationExpanded ? 'overflow-auto' : 'overflow-hidden'
           }`}
         >

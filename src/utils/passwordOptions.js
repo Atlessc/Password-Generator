@@ -1,4 +1,4 @@
-export const passwordOptions = [
+const basePasswordOptions = [
   {
     shortName: 'Special Characters',
     label: 'Pick one or more symbols. If none are selected, 1-3 random symbols are used.',
@@ -265,3 +265,75 @@ export const passwordOptions = [
     placeholder: 'Coffee Grinder',
   },
 ];
+
+const optionRandomMetaByAlgo = {
+  phraseInitials: { avgCharLength: 5, containsNumbers: false },
+  yourNameInitials: { avgCharLength: 2, containsNumbers: false },
+  streetLivedBefore: { avgCharLength: 4, containsNumbers: false },
+  reversedSpecialEventYear: { avgCharLength: 4, containsNumbers: true },
+  childBirthYear: { avgCharLength: 4, containsNumbers: true },
+  closePersonInitials: { avgCharLength: 3, containsNumbers: false },
+  childNameInitials: { avgCharLength: 2, containsNumbers: false },
+  famousPersonInitials: { avgCharLength: 2, containsNumbers: false },
+  partnerNameInitials: { avgCharLength: 2, containsNumbers: false },
+  specialDate: { avgCharLength: 5, containsNumbers: true },
+  anniversaryMmdd: { avgCharLength: 4, containsNumbers: true },
+  constantDigits: { avgCharLength: 6, containsNumbers: true },
+  lyricInitials: { avgCharLength: 4, containsNumbers: false },
+  goToFavoriteDish: { avgCharLength: 6, containsNumbers: false },
+  favoriteBookTitle: { avgCharLength: 5, containsNumbers: false },
+  goToFavoriteBreakfastDish: { avgCharLength: 6, containsNumbers: false },
+  memorablePlaceCode: { avgCharLength: 6, containsNumbers: false },
+  petNicknameCode: { avgCharLength: 5, containsNumbers: false },
+  personalAcronym: { avgCharLength: 4, containsNumbers: false },
+  milestoneMonthYear: { avgCharLength: 4, containsNumbers: true },
+  familiarNumberTail: { avgCharLength: 6, containsNumbers: true },
+  favoriteMovieTitle: { avgCharLength: 5, containsNumbers: false },
+  childhoodFriendInitials: { avgCharLength: 3, containsNumbers: false },
+  hometownZipTail: { avgCharLength: 5, containsNumbers: true },
+  favoriteTeamAbbrev: { avgCharLength: 4, containsNumbers: false },
+  firstConcertYear: { avgCharLength: 4, containsNumbers: true },
+  partnerBirthYear: { avgCharLength: 4, containsNumbers: true },
+  memorableStreetNumber: { avgCharLength: 4, containsNumbers: true },
+  travelCityPair: { avgCharLength: 6, containsNumbers: false },
+  seasonCode: { avgCharLength: 2, containsNumbers: false },
+  frequentAppName: { avgCharLength: 6, containsNumbers: false },
+  kitchenItemPair: { avgCharLength: 6, containsNumbers: false },
+};
+
+const inferRandomMeta = (option) => {
+  if (option.type === 'symbol-multi') {
+    return { avgCharLength: 2, containsNumbers: false };
+  }
+
+  if (option.type === 'number' || option.type === 'year-toggle' || option.type === 'mmdd-toggle') {
+    return { avgCharLength: 4, containsNumbers: true };
+  }
+
+  if (option.type === 'month') {
+    return { avgCharLength: 4, containsNumbers: true };
+  }
+
+  if (option.type === 'special-date') {
+    return { avgCharLength: 5, containsNumbers: true };
+  }
+
+  return { avgCharLength: 4, containsNumbers: false };
+};
+
+const attachRandomMeta = (option) => {
+  const inferred = inferRandomMeta(option);
+  const overrides = optionRandomMetaByAlgo[option.algo] || {};
+  const avgCharLength = Math.max(1, Number(overrides.avgCharLength ?? inferred.avgCharLength) || inferred.avgCharLength);
+  const containsNumbers = Boolean(overrides.containsNumbers ?? inferred.containsNumbers);
+  const selectionWeight = Number((1 / avgCharLength).toFixed(4));
+
+  return {
+    ...option,
+    avgCharLength,
+    containsNumbers,
+    selectionWeight,
+  };
+};
+
+export const passwordOptions = basePasswordOptions.map(attachRandomMeta);
