@@ -16,6 +16,7 @@ const firstLetters = (input = '', maxWords = Infinity) =>
 
 const firstNLetters = (input = '', count = 3) => String(input).replace(/[^a-zA-Z]/g, '').slice(0, count);
 const digitsOnly = (input = '') => String(input).replace(/\D/g, '');
+const alphaNumOnly = (input = '') => String(input).replace(/[^a-zA-Z0-9]/g, '');
 const randomChar = () => PASSWORD_CHARSET[Math.floor(Math.random() * PASSWORD_CHARSET.length)];
 const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -88,10 +89,78 @@ const songNameToPasswordPart = (input = '') => {
   if (!words.length) return '';
 
   if (words.length <= 2) {
+    return words.map((word) => alphaNumOnly(word)).filter(Boolean).join('');
+  }
+
+  return words
+    .map((word) => alphaNumOnly(word))
+    .filter(Boolean)
+    .map((word) => word[0])
+    .join('');
+};
+
+const joinWordsOrUseInitials = (input = '', maxWordsBeforeInitials = 2) => {
+  const words = getWords(input).map((word) => alphaNumOnly(word)).filter(Boolean);
+  if (!words.length) return '';
+
+  if (words.length <= maxWordsBeforeInitials) {
     return words.join('');
   }
 
   return words.map((word) => word[0]).join('');
+};
+
+const firstNOfEachWord = (input = '', countPerWord = 3, maxWords = 2) => {
+  const words = getWords(input).map((word) => alphaNumOnly(word)).filter(Boolean).slice(0, maxWords);
+  if (!words.length) return '';
+
+  return words.map((word) => word.slice(0, countPerWord)).join('');
+};
+
+const formatMonthYear = (input = '') => {
+  const match = String(input).match(/^(\d{4})-(\d{2})$/);
+  if (!match) return '';
+
+  const [, year, month] = match;
+  return `${month}${year.slice(-2)}`;
+};
+
+const parseYearWithReverseToggle = (input = '') => {
+  const rawValue = typeof input === 'object' ? input?.value : input;
+  const reverse = typeof input === 'object' ? Boolean(input?.reverse) : false;
+  const year = digitsOnly(rawValue).slice(0, 4);
+
+  if (year.length < 4) return '';
+  return reverse ? year.split('').reverse().join('') : year;
+};
+
+const parseAnniversaryMmdd = (input = '') => {
+  const rawValue = typeof input === 'object' ? input?.value : input;
+  const reverse = typeof input === 'object' ? Boolean(input?.reverse) : false;
+  const digits = digitsOnly(rawValue).slice(0, 4);
+
+  if (digits.length < 4) return '';
+
+  const month = Number(digits.slice(0, 2));
+  const day = Number(digits.slice(2, 4));
+  if (month < 1 || month > 12 || day < 1 || day > 31) return '';
+
+  return reverse ? `${digits.slice(2, 4)}${digits.slice(0, 2)}` : digits;
+};
+
+const seasonKeywordCode = (input = '') => {
+  const normalized = alphaNumOnly(String(input).toLowerCase());
+  if (!normalized) return '';
+
+  const knownSeasonCodes = {
+    spring: 'sp',
+    summer: 'su',
+    autumn: 'au',
+    fall: 'fa',
+    winter: 'wi',
+  };
+
+  return knownSeasonCodes[normalized] || normalized.slice(0, 3);
 };
 
 const transformByAlgo = {
@@ -100,27 +169,45 @@ const transformByAlgo = {
     return randomSpecialSymbols();
   },
   phraseInitials: (input) => firstLetters(input),
+  yourNameInitials: (input) => firstLetters(input, 2),
   streetLivedBefore: (input) => firstNLetters(input, 4),
   reversedSpecialEventYear: (input) => {
     const year = digitsOnly(input).slice(0, 4);
     if (!year) return '';
     return year.split('').reverse().join('');
   },
+  childBirthYear: (input) => parseYearWithReverseToggle(input),
   closePersonInitials: (input) => firstLetters(input),
+  childNameInitials: (input) => firstLetters(input, 2),
   famousPersonInitials: (input) => firstLetters(input),
+  partnerNameInitials: (input) => firstLetters(input, 2),
   specialDate: (input) => formatSpecialDate(input),
-  significantDay: (input) => {
-    const value = digitsOnly(input).slice(0, 2);
-    if (!value) return '';
-    return value.padStart(2, '0');
-  },
+  anniversaryMmdd: (input) => parseAnniversaryMmdd(input),
   constantDigits: (input) => digitsOnly(input).slice(0, 8),
   lyricInitials: (input) => songNameToPasswordPart(input),
-  frequentTimeCode: (input) => {
-    const value = digitsOnly(input).slice(0, 4);
-    if (!value) return '';
-    return value.padStart(4, '0');
+  goToFavoriteDish: (input) => joinWordsOrUseInitials(input, 2),
+  favoriteBookTitle: (input) => joinWordsOrUseInitials(input, 2),
+  goToFavoriteBreakfastDish: (input) => joinWordsOrUseInitials(input, 2),
+  memorablePlaceCode: (input) => firstNOfEachWord(input, 3, 2),
+  petNicknameCode: (input) => alphaNumOnly(input).slice(0, 8),
+  personalAcronym: (input) => firstLetters(input),
+  milestoneMonthYear: (input) => formatMonthYear(input),
+  familiarNumberTail: (input) => digitsOnly(input).slice(-6),
+  favoriteMovieTitle: (input) => joinWordsOrUseInitials(input, 2),
+  childhoodFriendInitials: (input) => firstLetters(input),
+  hometownZipTail: (input) => {
+    const value = digitsOnly(input).slice(0, 5);
+    if (value.length < 5) return '';
+    return value;
   },
+  favoriteTeamAbbrev: (input) => joinWordsOrUseInitials(input, 2),
+  firstConcertYear: (input) => digitsOnly(input).slice(0, 4),
+  partnerBirthYear: (input) => parseYearWithReverseToggle(input),
+  memorableStreetNumber: (input) => digitsOnly(input).slice(0, 4),
+  travelCityPair: (input) => joinWordsOrUseInitials(input, 2),
+  seasonCode: (input) => seasonKeywordCode(input),
+  frequentAppName: (input) => joinWordsOrUseInitials(input, 2),
+  kitchenItemPair: (input) => joinWordsOrUseInitials(input, 2),
 };
 
 const generateValue = (option, input, settings) => {

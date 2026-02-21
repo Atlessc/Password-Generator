@@ -13,12 +13,51 @@ const subtleTextClass = 'm-0 text-sm text-base-content/70';
 const inputClass = 'input input-bordered input-sm w-full bg-base-200/60';
 const panelHeaderClass = 'mb-2 border-b border-base-content/20 pb-1 text-xs font-bold uppercase tracking-wider text-base-content/90';
 
-const hasRequiredInput = (option, inputValues) => {
+const normalizeYearInput = (rawValue = '') => String(rawValue).replace(/\D/g, '').slice(0, 4);
+
+const normalizeMonthDayInput = (rawValue = '') => {
+  const digits = String(rawValue).replace(/\D/g, '').slice(0, 4);
+  if (digits.length <= 2) return digits;
+  return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+};
+
+const isValidMonthDay = (value = '') => {
+  const match = String(value).match(/^(\d{2})-(\d{2})$/);
+  if (!match) return false;
+
+  const month = Number(match[1]);
+  const day = Number(match[2]);
+  return month >= 1 && month <= 12 && day >= 1 && day <= 31;
+};
+
+const getFieldError = (option, inputValues) => {
   if (option.type === 'special-date') {
-    return Boolean(inputValues.specialDate?.date);
+    return inputValues.specialDate?.date ? '' : 'Pick a date.';
   }
 
-  return String(inputValues[option.algo] ?? '').trim().length > 0;
+  if (option.algo === 'hometownZipTail') {
+    return /^\d{5}$/.test(String(inputValues[option.algo] ?? '').trim())
+      ? ''
+      : 'Enter a valid 5-digit ZIP code.';
+  }
+
+  if (option.type === 'year-toggle') {
+    const value = typeof inputValues[option.algo] === 'object'
+      ? inputValues[option.algo]?.value
+      : inputValues[option.algo];
+
+    return /^\d{4}$/.test(String(value ?? '').trim()) ? '' : 'Enter a 4-digit year.';
+  }
+
+  if (option.type === 'mmdd-toggle') {
+    const value = typeof inputValues[option.algo] === 'object'
+      ? inputValues[option.algo]?.value
+      : inputValues[option.algo];
+
+    return isValidMonthDay(value) ? '' : 'Enter a valid MM-DD date.';
+  }
+
+  return String(inputValues[option.algo] ?? '').trim().length > 0 ? '' : 'This field is required.';
 };
 
 const normalizeMinLength = (rawValue, fallback) => {
@@ -120,7 +159,54 @@ function Home() {
   };
 
   const handleInputChange = (algo, value) => {
-    setInputValues((prev) => ({ ...prev, [algo]: value }));
+    const option = regularOptions.find((entry) => entry.algo === algo);
+
+    setInputValues((prev) => {
+      if (algo === 'hometownZipTail') {
+        return { ...prev, [algo]: String(value).replace(/\D/g, '').slice(0, 5) };
+      }
+
+      if (option?.type === 'year-toggle') {
+        const existing = typeof prev[algo] === 'object' ? prev[algo] : { value: '', reverse: false };
+        return {
+          ...prev,
+          [algo]: {
+            ...existing,
+            value: normalizeYearInput(value),
+          },
+        };
+      }
+
+      if (option?.type === 'mmdd-toggle') {
+        const existing = typeof prev[algo] === 'object' ? prev[algo] : { value: '', reverse: false };
+        return {
+          ...prev,
+          [algo]: {
+            ...existing,
+            value: normalizeMonthDayInput(value),
+          },
+        };
+      }
+
+      return { ...prev, [algo]: value };
+    });
+
+    clearFieldError(algo);
+    setGenerationError('');
+  };
+
+  const handleReverseToggleChange = (algo, checked) => {
+    setInputValues((prev) => {
+      const existing = typeof prev[algo] === 'object' ? prev[algo] : { value: '', reverse: false };
+      return {
+        ...prev,
+        [algo]: {
+          ...existing,
+          reverse: checked,
+        },
+      };
+    });
+
     clearFieldError(algo);
     setGenerationError('');
   };
@@ -174,8 +260,9 @@ function Home() {
 
     const nextFieldErrors = {};
     for (const option of selectedRegularOptions) {
-      if (!hasRequiredInput(option, inputValues)) {
-        nextFieldErrors[option.algo] = 'This field is required.';
+      const fieldError = getFieldError(option, inputValues);
+      if (fieldError) {
+        nextFieldErrors[option.algo] = fieldError;
       }
     }
 
@@ -469,6 +556,54 @@ function Home() {
                           </button>
                         </div>
                       </>
+                    ) : option.type === 'year-toggle' ? (
+                      <>
+                        <input
+                          id={option.algo}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={4}
+                          className={inputClass}
+                          value={typeof inputValues[option.algo] === 'object' ? inputValues[option.algo]?.value || '' : ''}
+                          placeholder={option.placeholder || ''}
+                          onChange={(event) => handleInputChange(option.algo, event.target.value)}
+                        />
+                        <label className="label cursor-pointer justify-start gap-2 p-0 text-xs text-base-content/75">
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-xs checkbox-primary"
+                            checked={Boolean(typeof inputValues[option.algo] === 'object' && inputValues[option.algo]?.reverse)}
+                            onChange={(event) => handleReverseToggleChange(option.algo, event.target.checked)}
+                          />
+                          <span className="label-text text-xs text-base-content/75">
+                            {option.reverseLabel || 'Reverse year'}
+                          </span>
+                        </label>
+                      </>
+                    ) : option.type === 'mmdd-toggle' ? (
+                      <>
+                        <input
+                          id={option.algo}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={5}
+                          className={inputClass}
+                          value={typeof inputValues[option.algo] === 'object' ? inputValues[option.algo]?.value || '' : ''}
+                          placeholder={option.placeholder || ''}
+                          onChange={(event) => handleInputChange(option.algo, event.target.value)}
+                        />
+                        <label className="label cursor-pointer justify-start gap-2 p-0 text-xs text-base-content/75">
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-xs checkbox-primary"
+                            checked={Boolean(typeof inputValues[option.algo] === 'object' && inputValues[option.algo]?.reverse)}
+                            onChange={(event) => handleReverseToggleChange(option.algo, event.target.checked)}
+                          />
+                          <span className="label-text text-xs text-base-content/75">
+                            {option.reverseLabel || 'Reverse MMDD'}
+                          </span>
+                        </label>
+                      </>
                     ) : option.type === 'number' ? (
                       <input
                         id={option.algo}
@@ -483,6 +618,8 @@ function Home() {
                         id={option.algo}
                         type={option.type}
                         className={inputClass}
+                        inputMode={option.algo === 'hometownZipTail' ? 'numeric' : undefined}
+                        maxLength={option.algo === 'hometownZipTail' ? 5 : undefined}
                         value={inputValues[option.algo] || ''}
                         placeholder={option.placeholder || ''}
                         onChange={(event) => handleInputChange(option.algo, event.target.value)}
