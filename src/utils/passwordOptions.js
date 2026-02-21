@@ -168,14 +168,6 @@ const basePasswordOptions = [
     type: 'month',
   },
   {
-    shortName: 'Familiar Number Tail',
-    label: 'Enter a familiar long number and use its tail digits.',
-    explanation: 'Takes the last 6 digits from what you enter.',
-    algo: 'familiarNumberTail',
-    type: 'text',
-    placeholder: '8675309123',
-  },
-  {
     shortName: 'Movie Title',
     label: 'Enter a movie title you remember well.',
     explanation: '1-2 words stay whole; 3+ words become initials. Example: "The Dark Knight" -> "tdk".',
@@ -287,7 +279,6 @@ const optionRandomMetaByAlgo = {
   petNicknameCode: { avgCharLength: 5, containsNumbers: false },
   personalAcronym: { avgCharLength: 4, containsNumbers: false },
   milestoneMonthYear: { avgCharLength: 4, containsNumbers: true },
-  familiarNumberTail: { avgCharLength: 6, containsNumbers: true },
   favoriteMovieTitle: { avgCharLength: 5, containsNumbers: false },
   childhoodFriendInitials: { avgCharLength: 3, containsNumbers: false },
   hometownZipTail: { avgCharLength: 5, containsNumbers: true },

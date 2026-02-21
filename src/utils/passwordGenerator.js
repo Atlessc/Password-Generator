@@ -192,7 +192,6 @@ const transformByAlgo = {
   petNicknameCode: (input) => alphaNumOnly(input).slice(0, 8),
   personalAcronym: (input) => firstLetters(input),
   milestoneMonthYear: (input) => formatMonthYear(input),
-  familiarNumberTail: (input) => digitsOnly(input).slice(-6),
   favoriteMovieTitle: (input) => joinWordsOrUseInitials(input, 2),
   childhoodFriendInitials: (input) => firstLetters(input),
   hometownZipTail: (input) => {
