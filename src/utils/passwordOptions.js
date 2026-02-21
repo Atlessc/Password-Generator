@@ -71,12 +71,12 @@ export const passwordOptions = [
     placeholder: '314159',
   },
   {
-    shortName: 'Lyric Initials',
-    label: 'Enter a lyric line and use first letters.',
-    explanation: 'Use initials from one line you personally remember.',
+    shortName: 'Song Name',
+    label: 'Enter a song name. One or two words are used directly; longer names use initials.',
+    explanation: 'Examples: "Numb" -> "Numb", "Bohemian Rhapsody" -> "BohemianRhapsody", "Stairway to Heaven" -> "sth".',
     algo: 'lyricInitials',
     type: 'text',
-    placeholder: 'we all live in a yellow submarine',
+    placeholder: 'Stairway to Heaven',
   },
   {
     shortName: 'Frequent Time Code',

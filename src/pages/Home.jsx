@@ -1,322 +1,35 @@
 import { useMemo, useState } from 'react';
-import styled from 'styled-components';
 import { generatePassword } from '../utils/passwordGenerator';
 import { passwordOptions } from '../utils/passwordOptions';
 
-const Container = styled.div`
-  min-height: 100vh;
-  padding: 1.25rem;
-  background-color: #0f172a;
-  color: white;
-`;
-
-const Header = styled.header`
-  text-align: center;
-  margin-bottom: 1rem;
-`;
-
-const Title = styled.h1`
-  margin: 0 0 0.4rem;
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-weight: 700;
-  background: linear-gradient(to right, #7dd3fc, #818cf8);
-  background-clip: text;
-  color: transparent;
-`;
-
-const Subtitle = styled.p`
-  margin: 0;
-  color: #94a3b8;
-`;
-
-const AppGrid = styled.div`
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr;
-
-  @media (min-width: 1100px) {
-    grid-template-columns: 1.65fr 1fr;
-  }
-`;
-
-const Card = styled.section`
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1rem;
-  padding: 1rem;
-`;
-
-const LeftCard = styled(Card)`
-  display: grid;
-  gap: 0.9rem;
-`;
-
-const RightCard = styled(Card)`
-  align-self: start;
-  position: sticky;
-  top: 1rem;
-  max-height: calc(100vh - 2rem);
-  overflow: ${({ explanationExpanded }) => (explanationExpanded ? 'auto' : 'hidden')};
-`;
-
-const TopRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-`;
-
-const SectionTitle = styled.h2`
-  margin: 0;
-  font-size: 1.15rem;
-`;
-
-const Subtle = styled.p`
-  margin: 0;
-  color: #94a3b8;
-  font-size: 0.92rem;
-`;
-
-const SymbolBlock = styled.div`
-  display: grid;
-  gap: 0.45rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.85rem;
-  padding: 0.75rem;
-`;
-
-const SymbolGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-`;
-
-const SymbolButton = styled.button`
-  border-radius: 0.45rem;
-  border: ${({ selected }) => (selected ? '1px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.25)')};
-  background: ${({ selected }) => (selected ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255, 255, 255, 0.07)')};
-  color: white;
-  padding: 0.32rem 0.52rem;
-  min-width: 2rem;
-  cursor: pointer;
-`;
-
-const SmallGhostButton = styled.button`
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  color: #dbeafe;
-  border-radius: 0.45rem;
-  padding: 0.28rem 0.5rem;
-  cursor: pointer;
-  font-size: 0.8rem;
-`;
-
-const WorkArea = styled.div`
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: 1fr;
-
-  @media (min-width: 980px) {
-    grid-template-columns: ${({ $sidebarOpen }) => ($sidebarOpen ? '280px 1fr' : '1fr')};
-  }
-`;
-
-const Sidebar = styled.div`
-  display: ${({ $open }) => ($open ? 'block' : 'none')};
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.85rem;
-  padding: 0.55rem;
-  max-height: 460px;
-  overflow-y: auto;
-`;
-
-const SidebarItem = styled.button`
-  width: 100%;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-  border-radius: 0.7rem;
-  border: ${({ selected }) => (selected ? '1px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.12)')};
-  background: ${({ selected }) => (selected ? 'rgba(99, 102, 241, 0.24)' : 'rgba(255, 255, 255, 0.06)')};
-  color: white;
-  padding: 0.55rem 0.62rem;
-  margin-bottom: 0.45rem;
-  cursor: pointer;
-`;
-
-const InfoWrap = styled.div`
-  position: relative;
-`;
-
-const InfoButton = styled.button`
-  width: 1.45rem;
-  height: 1.45rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.1);
-  color: #dbeafe;
-  cursor: pointer;
-  font-size: 0.78rem;
-`;
-
-const Popover = styled.div`
-  position: absolute;
-  left: 2rem;
-  top: 0;
-  width: 250px;
-  border-radius: 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: #0b1228;
-  padding: 0.55rem;
-  z-index: 15;
-  color: #cbd5e1;
-  font-size: 0.82rem;
-`;
-
-const FieldsPane = styled.div`
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.85rem;
-  padding: 0.75rem;
-  max-height: 460px;
-  overflow-y: auto;
-  display: grid;
-  gap: 0.75rem;
-`;
-
-const FieldCard = styled.div`
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.65rem;
-  display: grid;
-  gap: 0.35rem;
-`;
-
-const FieldLabel = styled.label`
-  font-size: 0.9rem;
-  color: #dbeafe;
-`;
-
-const Input = styled.input`
-  border-radius: 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(2, 6, 23, 0.55);
-  color: white;
-  padding: 0.5rem 0.58rem;
-`;
-
-const NumberInput = styled(Input)`
-  -moz-appearance: textfield;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-`;
-
-const Segmented = styled.div`
-  display: inline-flex;
-  gap: 0.32rem;
-`;
-
-const SegmentedButton = styled.button`
-  border-radius: 0.45rem;
-  border: ${({ active }) => (active ? '1px solid #6366f1' : '1px solid rgba(255, 255, 255, 0.2)')};
-  background: ${({ active }) => (active ? 'rgba(99, 102, 241, 0.28)' : 'rgba(255, 255, 255, 0.08)')};
-  color: white;
-  padding: 0.32rem 0.55rem;
-  cursor: pointer;
-`;
-
-const TwoColRow = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const ToggleWrap = styled.label`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-  color: #dbeafe;
-`;
-
-const Controls = styled.div`
-  display: flex;
-  gap: 0.65rem;
-  flex-wrap: wrap;
-  margin: 0.6rem 0 0.9rem;
-`;
-
-const Button = styled.button`
-  border: 0;
-  border-radius: 0.62rem;
-  padding: 0.5rem 0.82rem;
-  background: ${({ primary }) => (primary ? '#6366f1' : 'rgba(255, 255, 255, 0.14)')};
-  color: white;
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-const PasswordBox = styled.div`
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(2, 6, 23, 0.62);
-  min-height: 3.1rem;
-  padding: 0.78rem;
-  font-family: monospace;
-  font-size: 1.02rem;
-  word-break: break-all;
-  color: ${({ empty }) => (empty ? '#7c8aa5' : 'white')};
-`;
-
-const Meter = styled.div`
-  width: 100%;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  overflow: hidden;
-`;
-
-const MeterFill = styled.div`
-  height: 100%;
-  width: ${({ width }) => width};
-  background: ${({ color }) => color};
-`;
-
-const Checklist = styled.div`
-  display: flex;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-`;
-
-const Chip = styled.span`
-  font-size: 0.78rem;
-  border-radius: 999px;
-  padding: 0.22rem 0.48rem;
-  border: 1px solid ${({ active }) => (active ? 'rgba(34, 197, 94, 0.65)' : 'rgba(255, 255, 255, 0.22)')};
-  background: ${({ active }) => (active ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255, 255, 255, 0.06)')};
-  color: ${({ active }) => (active ? '#bbf7d0' : '#cbd5e1')};
-`;
-
-const ExplanationList = styled.ul`
-  margin: 0.75rem 0 0;
-  padding-left: 1rem;
-  color: #cbd5e1;
-`;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
 
 const symbolOption = passwordOptions.find((option) => option.algo === 'specialCharacterSelector');
 const regularOptions = passwordOptions.filter((option) => option.algo !== 'specialCharacterSelector');
+
+const cardClass = 'rounded-2xl border border-base-content/15 bg-base-100/30 p-4';
+const subtleTextClass = 'm-0 text-sm text-base-content/70';
+const inputClass = 'input input-bordered input-sm w-full bg-base-200/60';
+const panelHeaderClass = 'mb-2 border-b border-base-content/20 pb-1 text-xs font-bold uppercase tracking-wider text-base-content/90';
+
+const hasRequiredInput = (option, inputValues) => {
+  if (option.type === 'special-date') {
+    return Boolean(inputValues.specialDate?.date);
+  }
+
+  return String(inputValues[option.algo] ?? '').trim().length > 0;
+};
+
+const normalizeMinLength = (rawValue, fallback) => {
+  const match = String(rawValue ?? '').match(/\d+/);
+  if (!match) return fallback;
+
+  const parsed = Number(match[0]);
+  if (Number.isNaN(parsed)) return fallback;
+
+  return Math.max(MIN_PASSWORD_LENGTH, Math.min(MAX_PASSWORD_LENGTH, parsed));
+};
 
 const getStrength = (password) => {
   const checks = {
@@ -326,49 +39,73 @@ const getStrength = (password) => {
     symbol: /[^A-Za-z0-9]/.test(password),
   };
 
+  if (!password.length) {
+    return {
+      label: 'Not generated',
+      barClass: 'bg-base-content/20',
+      width: '0%',
+      checks,
+    };
+  }
+
   let score = 0;
   if (password.length >= 12) score += 1;
   if (password.length >= 18) score += 1;
   score += Object.values(checks).filter(Boolean).length;
 
-  if (score <= 2) return { label: 'Weak', color: '#ef4444', width: '25%', checks };
-  if (score <= 4) return { label: 'Fair', color: '#f59e0b', width: '50%', checks };
-  if (score <= 5) return { label: 'Strong', color: '#22c55e', width: '75%', checks };
-  return { label: 'Very Strong', color: '#10b981', width: '100%', checks };
+  if (score <= 2) return { label: 'Weak', barClass: 'bg-error', width: '25%', checks };
+  if (score <= 4) return { label: 'Fair', barClass: 'bg-warning', width: '50%', checks };
+  if (score <= 5) return { label: 'Strong', barClass: 'bg-success', width: '75%', checks };
+  return { label: 'Very Strong', barClass: 'bg-success', width: '100%', checks };
 };
 
 function Home() {
   const [selectedOptions, setSelectedOptions] = useState(symbolOption ? [symbolOption] : []);
   const [activeOptionAlgo, setActiveOptionAlgo] = useState(regularOptions[0]?.algo || '');
   const [openPopoverAlgo, setOpenPopoverAlgo] = useState('');
-  const [inputValues, setInputValues] = useState({ specialDate: { date: '', format: 'digits' } });
+  const [inputValues, setInputValues] = useState({ specialDate: { date: '', format: 'digits' }, specialCharacterSelector: [] });
   const [passwordParts, setPasswordParts] = useState([]);
-  const [passwordLength, setPasswordLength] = useState(18);
-  const [copied, setCopied] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [minLengthInput, setMinLengthInput] = useState('18');
+  const [minPasswordLength, setMinPasswordLength] = useState(18);
+  const [copyStatus, setCopyStatus] = useState({ type: 'idle', message: '' });
   const [explanationExpanded, setExplanationExpanded] = useState(false);
   const [capitalizeFirst, setCapitalizeFirst] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [generationError, setGenerationError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const selectedRegularOptions = useMemo(
     () => selectedOptions.filter((option) => option.algo !== 'specialCharacterSelector'),
     [selectedOptions],
   );
 
+  const selectedSymbols = useMemo(
+    () => (Array.isArray(inputValues.specialCharacterSelector) ? inputValues.specialCharacterSelector : []),
+    [inputValues.specialCharacterSelector],
+  );
+
   const fullPassword = useMemo(() => passwordParts.map((part) => part.value).join(''), [passwordParts]);
-
-  const displayPassword = useMemo(() => {
-    if (!fullPassword) return '';
-    if (showPassword) return fullPassword;
-    return '•'.repeat(fullPassword.length);
-  }, [fullPassword, showPassword]);
-
   const strength = useMemo(() => getStrength(fullPassword), [fullPassword]);
 
   const recipe = useMemo(
     () => passwordParts.filter((part) => part.source !== 'Random filler').map((part) => part.source).join(' + '),
     [passwordParts],
   );
+
+  const clearFieldError = (algo) => {
+    setFieldErrors((prev) => {
+      if (!prev[algo]) return prev;
+      const next = { ...prev };
+      delete next[algo];
+      return next;
+    });
+  };
+
+  const commitMinLength = (rawValue = minLengthInput) => {
+    const normalized = normalizeMinLength(rawValue, minPasswordLength);
+    setMinPasswordLength(normalized);
+    setMinLengthInput(String(normalized));
+  };
 
   const toggleOption = (option) => {
     setSelectedOptions((prev) => {
@@ -377,11 +114,15 @@ function Home() {
       return [...prev, option];
     });
 
+    clearFieldError(option.algo);
+    setGenerationError('');
     setActiveOptionAlgo(option.algo);
   };
 
   const handleInputChange = (algo, value) => {
     setInputValues((prev) => ({ ...prev, [algo]: value }));
+    clearFieldError(algo);
+    setGenerationError('');
   };
 
   const handleSpecialDateChange = (field, value) => {
@@ -393,6 +134,9 @@ function Home() {
         [field]: value,
       },
     }));
+
+    clearFieldError('specialDate');
+    setGenerationError('');
   };
 
   const toggleSymbolSelection = (symbol) => {
@@ -423,14 +167,35 @@ function Home() {
   };
 
   const handleGeneratePassword = () => {
-    const length = Math.max(8, Math.min(64, Number(passwordLength) || 18));
-    if (!selectedRegularOptions.length) return;
+    if (!selectedRegularOptions.length) {
+      setGenerationError('Select at least one option from Options Menu before generating.');
+      return;
+    }
+
+    const nextFieldErrors = {};
+    for (const option of selectedRegularOptions) {
+      if (!hasRequiredInput(option, inputValues)) {
+        nextFieldErrors[option.algo] = 'This field is required.';
+      }
+    }
+
+    if (Object.keys(nextFieldErrors).length) {
+      setFieldErrors(nextFieldErrors);
+      setGenerationError('Complete the highlighted option fields.');
+      return;
+    }
+
+    const normalizedMinLength = normalizeMinLength(minLengthInput, minPasswordLength);
+    setMinPasswordLength(normalizedMinLength);
+    setMinLengthInput(String(normalizedMinLength));
 
     const parts = generatePassword(selectedOptions, inputValues, {
-      length,
+      minLength: normalizedMinLength,
       capitalizationMode: capitalizeFirst ? 'first' : 'random',
     });
 
+    setFieldErrors({});
+    setGenerationError('');
     setPasswordParts(parts);
   };
 
@@ -438,260 +203,410 @@ function Home() {
     setSelectedOptions(symbolOption ? [symbolOption] : []);
     setInputValues({ specialDate: { date: '', format: 'digits' }, specialCharacterSelector: [] });
     setPasswordParts([]);
-    setCopied(false);
-    setShowPassword(false);
+    setCopyStatus({ type: 'idle', message: '' });
     setExplanationExpanded(false);
+    setGenerationError('');
+    setFieldErrors({});
   };
 
   const copyToClipboard = async () => {
     if (!fullPassword) return;
-    await navigator.clipboard.writeText(fullPassword);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+
+    try {
+      await navigator.clipboard.writeText(fullPassword);
+      setCopyStatus({ type: 'success', message: 'Copied to clipboard.' });
+      setTimeout(() => setCopyStatus({ type: 'idle', message: '' }), 1500);
+    } catch {
+      setCopyStatus({ type: 'error', message: 'Clipboard access failed. Copy manually from the password field.' });
+    }
   };
 
   return (
-    <Container>
-      <Header>
-        <Title>Memorable Password Generator</Title>
-        <Subtitle>Build passwords from personal-but-obscure options, then generate one combined password.</Subtitle>
-      </Header>
+    <main className="min-h-screen bg-base-300 p-5 text-base-content">
+      <header className="mb-4 text-center">
+        <h1 className="mb-2 bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-3xl font-bold leading-tight text-transparent sm:text-5xl">
+          Memorable Password Generator
+        </h1>
+        <p className={subtleTextClass}>
+          Build passwords from personal-but-obscure options, then generate one combined password.
+        </p>
+      </header>
 
-      <AppGrid>
-        <LeftCard>
-          <TopRow>
-            <SectionTitle>Password Options</SectionTitle>
-            <Subtle>{selectedOptions.length} selected / {passwordOptions.length} available</Subtle>
-          </TopRow>
+      <div className="grid gap-4 xl:grid-cols-[1.65fr_1fr]">
+        <section className={`${cardClass} grid gap-4`}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="m-0 text-xl font-bold">Password Options</h2>
+            <p className={subtleTextClass}>
+              {selectedRegularOptions.length} pattern options selected / {regularOptions.length} available
+            </p>
+          </div>
 
-          <SymbolBlock>
-            <Subtle>{symbolOption?.label}</Subtle>
-            <SymbolGrid>
+          <div className="rounded-xl border border-base-content/15 p-3">
+            <h3 className={panelHeaderClass}>Generator Settings</h3>
+
+            <div className="grid gap-3 md:grid-cols-[minmax(260px,360px)_1fr] md:items-end">
+              <label className="grid gap-1" htmlFor="min-password-length">
+                <span className="text-sm font-medium text-base-content/90">Minimum Password Length (8-64)</span>
+                <input
+                  id="min-password-length"
+                  type="text"
+                  inputMode="numeric"
+                  className={`${inputClass} [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+                  value={minLengthInput}
+                  onChange={(event) => setMinLengthInput(event.target.value)}
+                  onBlur={() => commitMinLength()}
+                  onKeyDown={(event) => {
+                    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                      event.preventDefault();
+                      const current = normalizeMinLength(minLengthInput, minPasswordLength);
+                      const delta = event.key === 'ArrowUp' ? 1 : -1;
+                      const next = Math.max(MIN_PASSWORD_LENGTH, Math.min(MAX_PASSWORD_LENGTH, current + delta));
+                      setMinPasswordLength(next);
+                      setMinLengthInput(String(next));
+                    }
+
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      commitMinLength();
+                    }
+                  }}
+                  placeholder="Example: 18"
+                />
+                <span className="text-xs text-base-content/65">
+                  Type a value, then use keyboard up/down arrows to adjust.
+                </span>
+              </label>
+
+              <label className="label cursor-pointer justify-start gap-2 p-0 md:pb-1">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm checkbox-primary"
+                  checked={capitalizeFirst}
+                  onChange={(event) => setCapitalizeFirst(event.target.checked)}
+                />
+                <span className="label-text text-sm text-base-content/90">
+                  Capitalize first letter in each option output
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-base-content/15 p-3">
+            <h3 className={panelHeaderClass}>Special Symbols</h3>
+
+            <p className={subtleTextClass}>{symbolOption?.label}</p>
+
+            <div className="mt-2 flex flex-wrap gap-1.5">
               {symbolOption?.symbols.map((symbol) => {
-                const selectedSymbols = Array.isArray(inputValues.specialCharacterSelector)
-                  ? inputValues.specialCharacterSelector
-                  : [];
                 const selected = selectedSymbols.includes(symbol);
+
                 return (
-                  <SymbolButton
+                  <button
                     key={`symbol-${symbol}`}
                     type="button"
-                    selected={selected}
+                    className={`btn btn-sm min-w-8 px-2 ${
+                      selected
+                        ? 'btn-primary'
+                        : 'btn-ghost border border-base-content/25 bg-base-100/40 hover:bg-base-100/70'
+                    }`}
                     onClick={() => toggleSymbolSelection(symbol)}
                   >
                     {symbol}
-                  </SymbolButton>
+                  </button>
                 );
               })}
-            </SymbolGrid>
-            <TwoColRow>
-              <SmallGhostButton type="button" onClick={clearSymbols}>Select none</SmallGhostButton>
-              <SmallGhostButton type="button" onClick={selectAllSymbols}>Select all</SmallGhostButton>
-              <SmallGhostButton type="button" onClick={randomizeSymbols}>Randomize</SmallGhostButton>
-            </TwoColRow>
-            <Subtle>
-              {Array.isArray(inputValues.specialCharacterSelector) && inputValues.specialCharacterSelector.length
-                ? `Selected: ${inputValues.specialCharacterSelector.join(' ')}`
+            </div>
+
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                className="btn btn-xs sm:btn-sm btn-ghost border border-base-content/25 normal-case"
+                onClick={clearSymbols}
+              >
+                Select none
+              </button>
+              <button
+                type="button"
+                className="btn btn-xs sm:btn-sm btn-ghost border border-base-content/25 normal-case"
+                onClick={selectAllSymbols}
+              >
+                Select all
+              </button>
+              <button
+                type="button"
+                className="btn btn-xs sm:btn-sm btn-ghost border border-base-content/25 normal-case"
+                onClick={randomizeSymbols}
+              >
+                Randomize
+              </button>
+            </div>
+
+            <p className={`${subtleTextClass} mt-2`}>
+              {selectedSymbols.length
+                ? `Selected symbols: ${selectedSymbols.join(' ')}`
                 : 'No symbols selected. Generator will pick 1-3 random symbols.'}
-            </Subtle>
-          </SymbolBlock>
+            </p>
+          </div>
 
-          <TwoColRow>
-            <SmallGhostButton
-              type="button"
-              onClick={() => setSidebarOpen((prev) => !prev)}
-            >
-              {sidebarOpen ? 'Hide options menu' : 'Show options menu'}
-            </SmallGhostButton>
-          </TwoColRow>
+          <div className="rounded-xl border border-base-content/15 p-3">
+            <h3 className={panelHeaderClass}>Pattern Builder</h3>
 
-          <WorkArea $sidebarOpen={sidebarOpen}>
-            <Sidebar $open={sidebarOpen}>
-              <Subtle style={{ marginBottom: '0.45rem' }}>Sidebar Menu</Subtle>
-              {regularOptions.map((option) => {
-                const selected = selectedOptions.some((entry) => entry.algo === option.algo);
-                return (
-                  <SidebarItem
-                    key={option.algo}
-                    selected={selected}
-                    type="button"
-                    onClick={() => toggleOption(option)}
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                className="btn btn-xs normal-case sm:btn-sm btn-outline btn-primary"
+                onClick={() => setSidebarOpen((prev) => !prev)}
+              >
+                {sidebarOpen ? 'Hide options menu' : 'Show options menu'}
+              </button>
+            </div>
+
+            <div className={`grid items-start gap-3 ${sidebarOpen ? 'lg:grid-cols-[280px_1fr]' : ''}`}>
+              <aside
+                className={`${sidebarOpen ? 'block' : 'hidden'} max-h-[460px] overflow-y-auto rounded-xl border border-base-content/15 p-2`}
+              >
+                <h4 className={panelHeaderClass}>Options Menu</h4>
+
+                {regularOptions.map((option) => {
+                  const selected = selectedOptions.some((entry) => entry.algo === option.algo);
+                  const detailsOpen = openPopoverAlgo === option.algo;
+
+                  return (
+                    <div
+                      key={option.algo}
+                      className={`mb-2 rounded-xl border p-2 ${
+                        selected
+                          ? 'border-primary/70 bg-primary/20'
+                          : 'border-base-content/15 bg-base-100/40'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <button
+                          type="button"
+                          className="flex-1 text-left text-sm font-medium"
+                          onClick={() => toggleOption(option)}
+                        >
+                          {option.shortName}
+                        </button>
+
+                        <button
+                          type="button"
+                          className="btn btn-circle btn-xs btn-ghost border border-base-content/30"
+                          onClick={() => setOpenPopoverAlgo((prev) => (prev === option.algo ? '' : option.algo))}
+                          aria-label={`View details for ${option.shortName}`}
+                          aria-expanded={detailsOpen}
+                        >
+                          i
+                        </button>
+                      </div>
+
+                      {detailsOpen && (
+                        <div className="mt-2 rounded-lg border border-base-content/20 bg-base-200/55 p-2 text-xs text-base-content/80">
+                          {option.explanation}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </aside>
+
+              <div className="flex max-h-[460px] flex-col items-stretch justify-start gap-3 overflow-y-auto rounded-xl border border-base-content/15 p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="m-0 text-sm font-bold uppercase tracking-wider text-base-content/90">Option Fields</h4>
+                  <p className={subtleTextClass}>Select 1 or more options. 2-4 options are recommended.</p>
+                </div>
+
+                {selectedRegularOptions.length === 0 && (
+                  <p className={subtleTextClass}>Select at least one option from the menu to unlock generation.</p>
+                )}
+
+                {selectedRegularOptions.map((option) => (
+                  <div
+                    key={`field-${option.algo}`}
+                    className={`grid gap-1.5 rounded-xl border bg-base-100/35 p-3 ${
+                      fieldErrors[option.algo]
+                        ? 'border-error/60'
+                        : 'border-base-content/15'
+                    } ${activeOptionAlgo === option.algo ? 'ring-1 ring-info/60' : ''}`}
                   >
-                    <span>{option.shortName}</span>
-                    <InfoWrap>
-                      <InfoButton
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setOpenPopoverAlgo((prev) => (prev === option.algo ? '' : option.algo));
-                        }}
-                      >
-                        i
-                      </InfoButton>
-                      {openPopoverAlgo === option.algo && <Popover>{option.explanation}</Popover>}
-                    </InfoWrap>
-                  </SidebarItem>
-                );
-              })}
-            </Sidebar>
+                    <label className="text-sm font-medium text-base-content/90" htmlFor={option.algo}>
+                      {option.label}
+                    </label>
 
-            <FieldsPane>
-              <TopRow>
-                <Subtle>Option Fields</Subtle>
-                <Subtle>Select 2-4 options for best memorability.</Subtle>
-              </TopRow>
+                    {option.type === 'special-date' ? (
+                      <>
+                        <input
+                          id={option.algo}
+                          type="date"
+                          className={inputClass}
+                          value={inputValues.specialDate?.date || ''}
+                          onChange={(event) => handleSpecialDateChange('date', event.target.value)}
+                        />
 
-              {selectedRegularOptions.length === 0 && (
-                <Subtle>Select at least one sidebar option to unlock generation.</Subtle>
-              )}
+                        <div className="join">
+                          <button
+                            type="button"
+                            className={`join-item btn btn-xs sm:btn-sm ${
+                              (inputValues.specialDate?.format || 'digits') === 'digits'
+                                ? 'btn-primary'
+                                : 'btn-outline btn-primary'
+                            }`}
+                            onClick={() => handleSpecialDateChange('format', 'digits')}
+                          >
+                            01/15/25 -&gt; 11525
+                          </button>
 
-              {selectedRegularOptions.map((option) => (
-                <FieldCard key={`field-${option.algo}`} style={{ outline: activeOptionAlgo === option.algo ? '1px solid rgba(125, 211, 252, 0.55)' : 'none' }}>
-                  <FieldLabel htmlFor={option.algo}>{option.label}</FieldLabel>
-
-                  {option.type === 'special-date' ? (
-                    <>
-                      <Input
+                          <button
+                            type="button"
+                            className={`join-item btn btn-xs sm:btn-sm ${
+                              (inputValues.specialDate?.format || 'digits') === 'monthText'
+                                ? 'btn-primary'
+                                : 'btn-outline btn-primary'
+                            }`}
+                            onClick={() => handleSpecialDateChange('format', 'monthText')}
+                          >
+                            Jan1525
+                          </button>
+                        </div>
+                      </>
+                    ) : option.type === 'number' ? (
+                      <input
                         id={option.algo}
-                        type="date"
-                        value={inputValues.specialDate?.date || ''}
-                        onChange={(event) => handleSpecialDateChange('date', event.target.value)}
+                        type="number"
+                        className={inputClass}
+                        value={inputValues[option.algo] || ''}
+                        placeholder={option.placeholder || ''}
+                        onChange={(event) => handleInputChange(option.algo, event.target.value)}
                       />
-                      <Segmented>
-                        <SegmentedButton
-                          type="button"
-                          active={(inputValues.specialDate?.format || 'digits') === 'digits'}
-                          onClick={() => handleSpecialDateChange('format', 'digits')}
-                        >
-                          01/15/25 -&gt; 11525
-                        </SegmentedButton>
-                        <SegmentedButton
-                          type="button"
-                          active={(inputValues.specialDate?.format || 'digits') === 'monthText'}
-                          onClick={() => handleSpecialDateChange('format', 'monthText')}
-                        >
-                          Jan1525
-                        </SegmentedButton>
-                      </Segmented>
-                    </>
-                  ) : option.type === 'number' ? (
-                    <NumberInput
-                      id={option.algo}
-                      type="number"
-                      value={inputValues[option.algo] || ''}
-                      placeholder={option.placeholder || ''}
-                      onChange={(event) => handleInputChange(option.algo, event.target.value)}
-                    />
-                  ) : (
-                    <Input
-                      id={option.algo}
-                      type={option.type}
-                      value={inputValues[option.algo] || ''}
-                      placeholder={option.placeholder || ''}
-                      onChange={(event) => handleInputChange(option.algo, event.target.value)}
-                    />
-                  )}
-                </FieldCard>
-              ))}
-            </FieldsPane>
-          </WorkArea>
+                    ) : (
+                      <input
+                        id={option.algo}
+                        type={option.type}
+                        className={inputClass}
+                        value={inputValues[option.algo] || ''}
+                        placeholder={option.placeholder || ''}
+                        onChange={(event) => handleInputChange(option.algo, event.target.value)}
+                      />
+                    )}
 
-          <TwoColRow>
-            <ToggleWrap>
-              <input
-                type="checkbox"
-                checked={capitalizeFirst}
-                onChange={(event) => setCapitalizeFirst(event.target.checked)}
-              />
-              Capitalize first letter in each option output
-            </ToggleWrap>
-            <ToggleWrap>
-              <input type="checkbox" checked={showPassword} onChange={(event) => setShowPassword(event.target.checked)} />
-              Show password text
-            </ToggleWrap>
-          </TwoColRow>
+                    {fieldErrors[option.algo] && (
+                      <p className="m-0 text-xs text-error">{fieldErrors[option.algo]}</p>
+                    )}
+                  </div>
+                ))}
 
-          <TwoColRow>
-            <FieldLabel htmlFor="password-length">Password Length (8-64)</FieldLabel>
-            <NumberInput
-              id="password-length"
-              type="number"
-              min="8"
-              max="64"
-              value={passwordLength}
-              onChange={(event) => {
-                const value = Number(event.target.value);
-                if (Number.isNaN(value)) {
-                  setPasswordLength(8);
-                  return;
-                }
-                setPasswordLength(Math.max(8, Math.min(64, value)));
-              }}
+                {generationError && (
+                  <div className="alert alert-warning p-2 text-sm">
+                    <span>{generationError}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <p className={subtleTextClass}>
+            Security note: avoid exact public facts. Slightly customize your inputs so only you know the pattern.
+          </p>
+        </section>
+
+        <section
+          className={`${cardClass} sticky top-4 self-start max-h-[calc(100vh-2rem)] ${
+            explanationExpanded ? 'overflow-auto' : 'overflow-hidden'
+          }`}
+        >
+          <h2 className="m-0 text-xl font-bold">Generated Password</h2>
+
+          <div className="mb-3 mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="btn btn-sm btn-primary"
+              onClick={handleGeneratePassword}
+            >
+              {fullPassword ? 'Regenerate' : 'Generate'}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost border border-base-content/25"
+              onClick={handleClear}
+            >
+              Clear
+            </button>
+          </div>
+
+          <div className="join w-full">
+            <input
+              type="text"
+              className="input input-bordered join-item w-full bg-base-200/65 font-mono"
+              value={fullPassword}
+              placeholder="Your password will appear here."
+              readOnly
+              aria-label="Generated password"
             />
-          </TwoColRow>
-
-          <Subtle>Security note: avoid exact public facts. Slightly customize your inputs so only you know the pattern.</Subtle>
-        </LeftCard>
-
-        <RightCard explanationExpanded={explanationExpanded}>
-          <SectionTitle>Generated Password</SectionTitle>
-
-          <Controls>
-            <Button
-              primary
-              disabled={!selectedRegularOptions.length}
-              onClick={handleGeneratePassword}
+            <button
+              type="button"
+              className="btn btn-secondary join-item"
+              disabled={!fullPassword}
+              onClick={copyToClipboard}
             >
-              Generate
-            </Button>
-            <Button
-              disabled={!selectedRegularOptions.length}
-              onClick={handleGeneratePassword}
+              {copyStatus.type === 'success' ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+
+          {copyStatus.message && (
+            <div className={`alert mt-2 p-2 text-sm ${copyStatus.type === 'error' ? 'alert-error' : 'alert-success'}`}>
+              <span>{copyStatus.message}</span>
+            </div>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-sm text-base-content/70">
+            <p className="m-0">Length: {fullPassword.length}</p>
+            <p className="m-0">Strength: {strength.label}</p>
+          </div>
+
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-base-content/15">
+            <div className={`h-full transition-[width] duration-300 ${strength.barClass}`} style={{ width: strength.width }} />
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            <span className={`badge badge-sm ${strength.checks.uppercase ? 'badge-success' : 'badge-ghost'}`}>
+              Uppercase
+            </span>
+            <span className={`badge badge-sm ${strength.checks.lowercase ? 'badge-success' : 'badge-ghost'}`}>
+              Lowercase
+            </span>
+            <span className={`badge badge-sm ${strength.checks.number ? 'badge-success' : 'badge-ghost'}`}>
+              Number
+            </span>
+            <span className={`badge badge-sm ${strength.checks.symbol ? 'badge-success' : 'badge-ghost'}`}>
+              Symbol
+            </span>
+          </div>
+
+          <p className={`${subtleTextClass} mt-3`}>Recipe: {recipe || 'No options generated yet.'}</p>
+
+          <div className="mt-3">
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost border border-base-content/25"
+              onClick={() => setExplanationExpanded((prev) => !prev)}
             >
-              Regenerate
-            </Button>
-            <Button disabled={!fullPassword} onClick={copyToClipboard}>{copied ? 'Copied' : 'Copy'}</Button>
-            <Button onClick={handleClear}>Clear</Button>
-          </Controls>
-
-          <PasswordBox empty={!fullPassword}>{displayPassword || 'Your password will appear here.'}</PasswordBox>
-
-          <TopRow style={{ marginTop: '0.55rem' }}>
-            <Subtle>Length: {fullPassword.length}</Subtle>
-            <Subtle>Strength: {strength.label}</Subtle>
-          </TopRow>
-
-          <Meter>
-            <MeterFill width={strength.width} color={strength.color} />
-          </Meter>
-
-          <Checklist style={{ marginTop: '0.55rem' }}>
-            <Chip active={strength.checks.uppercase}>Uppercase</Chip>
-            <Chip active={strength.checks.lowercase}>Lowercase</Chip>
-            <Chip active={strength.checks.number}>Number</Chip>
-            <Chip active={strength.checks.symbol}>Symbol</Chip>
-          </Checklist>
-
-          <Subtle style={{ marginTop: '0.65rem' }}>Recipe: {recipe || 'No options generated yet.'}</Subtle>
-
-          <Controls>
-            <Button onClick={() => setExplanationExpanded((prev) => !prev)}>
               {explanationExpanded ? 'Hide Explanation' : 'Expand Explanation'}
-            </Button>
-          </Controls>
+            </button>
+          </div>
 
           {explanationExpanded && passwordParts.length > 0 && (
-            <ExplanationList>
+            <ul className="mt-3 list-disc pl-5 text-sm text-base-content/80">
               {passwordParts.map((part, index) => (
                 <li key={`${part.source}-${index}`}>
                   <strong>{part.source}:</strong> {part.value}
                 </li>
               ))}
-            </ExplanationList>
+            </ul>
           )}
-        </RightCard>
-      </AppGrid>
-    </Container>
+        </section>
+      </div>
+    </main>
   );
 }
 

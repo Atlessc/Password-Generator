@@ -1,14 +1,19 @@
-import React from 'react';
 import useStore from '../ZustandStore';
-import Tooltip from './UI54/Tooltip';
+import Tooltip from './UI54/composites/Tooltip/Tooltip';
 
 function PasswordExplanation() {
-  const { password, passwordExplanation } = useStore();
+  const passwordExplanation = useStore((state) => state.passwordExplanation);
 
-  // Generate structured explanation parts
   const explanationParts = passwordExplanation.map((explanation, index) => {
-    const [label, value] = explanation.split(':'); // Split explanation into label and value
-    return { label: label.trim(), value: value.trim(), index };
+    const separatorIndex = explanation.indexOf(':');
+
+    if (separatorIndex === -1) {
+      return { label: 'Generated Part', value: explanation.trim(), index };
+    }
+
+    const label = explanation.slice(0, separatorIndex).trim();
+    const value = explanation.slice(separatorIndex + 1).trim();
+    return { label, value, index };
   });
 
   return (
@@ -50,11 +55,11 @@ function PasswordExplanation() {
                 color: '#111827',
                 transition: 'background-color 0.2s ease',
               }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#e5e7eb';
+              onMouseEnter={(event) => {
+                event.currentTarget.style.backgroundColor = '#e5e7eb';
               }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#f3f4f6';
+              onMouseLeave={(event) => {
+                event.currentTarget.style.backgroundColor = '#f3f4f6';
               }}
             >
               {part.value}

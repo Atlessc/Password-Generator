@@ -19,6 +19,14 @@ const digitsOnly = (input = '') => String(input).replace(/\D/g, '');
 const randomChar = () => PASSWORD_CHARSET[Math.floor(Math.random() * PASSWORD_CHARSET.length)];
 const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+const shuffleArray = (arr) => {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+};
 
 const parseNumber = (input, fallback = 0) => {
   const value = parseInt(String(input), 10);
@@ -58,11 +66,11 @@ const randomSpecialSymbols = () => {
 
 const formatSpecialDate = (input) => {
   const dateValue = input?.date;
-  if (!dateValue) return 'Jan1525';
+  if (!dateValue) return '';
 
   const format = input?.format || 'digits';
   const parsed = new Date(`${dateValue}T00:00:00`);
-  if (Number.isNaN(parsed.getTime())) return 'Jan1525';
+  if (Number.isNaN(parsed.getTime())) return '';
 
   const month = parsed.getMonth() + 1;
   const day = parsed.getDate();
@@ -75,24 +83,44 @@ const formatSpecialDate = (input) => {
   return `${month}${day}${year}`;
 };
 
+const songNameToPasswordPart = (input = '') => {
+  const words = getWords(input);
+  if (!words.length) return '';
+
+  if (words.length <= 2) {
+    return words.join('');
+  }
+
+  return words.map((word) => word[0]).join('');
+};
+
 const transformByAlgo = {
   specialCharacterSelector: (input) => {
     if (Array.isArray(input) && input.length) return input.join('');
     return randomSpecialSymbols();
   },
-  phraseInitials: (input) => firstLetters(input) || 'ClctT',
-  streetLivedBefore: (input) => firstNLetters(input, 4) || 'Mapl',
+  phraseInitials: (input) => firstLetters(input),
+  streetLivedBefore: (input) => firstNLetters(input, 4),
   reversedSpecialEventYear: (input) => {
     const year = digitsOnly(input).slice(0, 4);
-    return (year || '2018').split('').reverse().join('');
+    if (!year) return '';
+    return year.split('').reverse().join('');
   },
-  closePersonInitials: (input) => firstLetters(input) || 'Amj',
-  famousPersonInitials: (input) => firstLetters(input) || 'Ts',
+  closePersonInitials: (input) => firstLetters(input),
+  famousPersonInitials: (input) => firstLetters(input),
   specialDate: (input) => formatSpecialDate(input),
-  significantDay: (input) => digitsOnly(input).slice(0, 2).padStart(2, '0') || '07',
-  constantDigits: (input) => digitsOnly(input).slice(0, 8) || '31415926',
-  lyricInitials: (input) => firstLetters(input) || 'WaliyS',
-  frequentTimeCode: (input) => digitsOnly(input).slice(0, 4).padStart(4, '0') || '1111',
+  significantDay: (input) => {
+    const value = digitsOnly(input).slice(0, 2);
+    if (!value) return '';
+    return value.padStart(2, '0');
+  },
+  constantDigits: (input) => digitsOnly(input).slice(0, 8),
+  lyricInitials: (input) => songNameToPasswordPart(input),
+  frequentTimeCode: (input) => {
+    const value = digitsOnly(input).slice(0, 4);
+    if (!value) return '';
+    return value.padStart(4, '0');
+  },
 };
 
 const generateValue = (option, input, settings) => {
@@ -105,36 +133,29 @@ const generateValue = (option, input, settings) => {
 
 export function generatePassword(options, inputs = {}, settings = {}) {
   const selected = Array.isArray(options) ? options : [];
+  const shuffledSelected = shuffleArray(selected);
 
-  const parts = selected.map((option) => ({
-    value: generateValue(option, inputs[option.algo], settings),
-    source: option.shortName,
-  }));
+  const parts = shuffledSelected
+    .map((option) => ({
+      value: generateValue(option, inputs[option.algo], settings),
+      source: option.shortName,
+    }))
+    .filter((part) => part.value.length > 0);
+
+  if (!parts.length) return [];
 
   const rawPassword = parts.map((part) => part.value).join('');
-  const targetLength = clamp(parseNumber(settings.length, rawPassword.length || 16), 8, 64);
+  const targetLength = clamp(
+    parseNumber(settings.minLength ?? settings.length, rawPassword.length || 16),
+    8,
+    64,
+  );
   let password = rawPassword;
 
   while (password.length < targetLength) {
     const char = randomChar();
     password += char;
     parts.push({ value: char, source: 'Random filler' });
-  }
-
-  if (password.length > targetLength) {
-    let remaining = targetLength;
-    const trimmedParts = [];
-
-    for (const part of parts) {
-      if (remaining <= 0) break;
-      const nextValue = part.value.slice(0, remaining);
-      if (!nextValue) continue;
-
-      trimmedParts.push({ ...part, value: nextValue });
-      remaining -= nextValue.length;
-    }
-
-    return trimmedParts;
   }
 
   return parts;

@@ -22,6 +22,29 @@ The purpose of this project is to help users create passwords that are both stro
 
 - **Password Explanation:** After generating the password, the app provides an explanation of the different parts of the password based on the user's inputs.
 
+## DaisyUI Quick Start
+
+This project now includes Tailwind CSS + DaisyUI.
+
+- Tailwind Vite plugin is enabled in `vite.config.js`.
+- DaisyUI is loaded in `src/index.css`.
+- Current default theme is set in `index.html` using `data-theme="night"`.
+
+When the dev server is running, you can start using DaisyUI classes immediately:
+
+```jsx
+<button className="btn btn-primary">Generate</button>
+<input className="input input-bordered w-full" placeholder="Type here" />
+<div className="card bg-base-200 shadow-sm">
+  <div className="card-body">
+    <h2 className="card-title">Password Preview</h2>
+    <p>Use Daisy utility classes and component classes together.</p>
+  </div>
+</div>
+```
+
+To switch themes quickly, change the `data-theme` value in `index.html` (for example: `night`, `light`, `corporate`, `dark`).
+
 ## Available Options for Password Generation
 
 1. Use the first letter of each word from a random phrase you created.
