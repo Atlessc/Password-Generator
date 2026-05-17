@@ -1,11 +1,15 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+import { useId } from 'react';
 
-function InputField({ label, value, onChange, type }) {
+function InputField({ id, label, value, onChange, type }) {
+  const generatedId = useId();
+  const inputId = id || `input-field-${generatedId}`;
+
   return (
     <div>
-      <label htmlFor="input-field">{label}</label>
+      <label htmlFor={inputId}>{label}</label>
       <input
-        id="input-field"
+        id={inputId}
         type={type}
         value={value}
         onChange={onChange}

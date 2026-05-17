@@ -3,14 +3,8 @@ export const optionDetails = [
     shortName: "Phrase Initials",
     label: "Enter a sentence or phrase, and we'll use the first letter of each word to create part of your password.",
     algo: "getPhraseInitials",
-    type: "text", // This option requires a text input for the phrase
+    type: "text", 
   },
-  // {
-  //   shortName: "Significant Day",
-  //   label: "Enter a date (e.g., 'October 13th') and we'll use the day and month to create part of your password.",
-  //   algo: "getSignificantDay",
-  //   type: "text", // This option would require a text input for the date
-  // },
   {
     shortName: "Daily Products Used",
     label: "Enter a name of a product you use daily.",
@@ -29,24 +23,18 @@ export const optionDetails = [
     algo: "getCommonWordAnagram",
     type: "text", 
   },
-  // {
-  //   shortName: "Character Name",
-  //   label: "Enter the name of a character from a story you closely relate to, and we'll combine it with a random number to create part of your password.",
-  //   algo: "getCharacterName",
-  //   type: "text",
-  // },
+  {
+    shortName: "Character Name",
+    label: "Enter the name of a character from a story you closely relate to, and we'll combine it with a random number to create part of your password.",
+    algo: "getCharacterName",
+    type: "text",
+  },
   {
     shortName: "Reversed year",
     label: "Enter a year thats important to you or that you remember for some reason, nothing within the last 20 years, and then We'll reverse it.",
     algo: "getReversedYear",
     type: "number",
   },
-  // {
-  //   shortName: "Street Names",
-  //   label: "Enter three street names you've passed by recently, and we'll use the first letters of each to create part of your password.",
-  //   algo: "getStreetNames",
-  //   type: "text", 
-  // },
   {
     shortName: "Random Number",
     label: "Generate a random number",
